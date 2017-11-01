@@ -1,0 +1,31 @@
+unless Vagrant.has_plugin?("vagrant-vbguest")
+  raise 'vagrant-vbguest plugin is not installed!  Please run the following command: vagrant plugin install vagrant-vbguest'
+end
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/xenial64"
+  config.ssh.forward_agent = true
+  config.vm.network :forwarded_port, guest: 3000, host: 3030
+  config.vm.synced_folder "../yesod", "/yesod"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "4196"
+    vb.cpus = 4
+    vb.name = "dev-wire-yesod"
+  end
+
+  config.vm.provision "shell", name: "postgres", inline: "
+    apt-get -y install postgresql postgresql-9.5 postgresql-client postgresql-common libpq-dev
+    sudo -u postgres bash -c \"psql -tc \\\"SELECT 1 FROM pg_roles WHERE rolname = 'wire'\\\" | grep -q 1 || psql -c \\\"CREATE USER wire WITH PASSWORD 'wire'\\\"\"
+    sudo -u postgres bash -c \"psql -c \\\"ALTER USER wire CREATEDB\\\"\"
+    sudo -u postgres bash -c \"psql -tc \\\"SELECT 1 FROM pg_database WHERE datname = 'wire'\\\" | grep -q 1 || psql -c \\\"CREATE DATABASE wire OWNER wire\\\"\"
+  "
+
+  config.vm.provision "shell", name: "stack", privileged: false, inline: "
+    cd /yesod/wire
+    curl -sSL https://get.haskellstack.org/ | sh
+    stack build yesod-bin cabal-install --install-ghc
+    stack build
+  "
+end
