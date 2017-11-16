@@ -1,0 +1,7 @@
+<main>
+    <div .container>
+        <div .row>
+            <form role=form method=post action=@{SignupR} enctype=#{formEnctype}>
+                ^{formWidget}
+                <div .text-center">
+                    <button type="submit" .btn.btn-primary.col-sm-12">Submit</button>

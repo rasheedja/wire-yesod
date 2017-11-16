@@ -1,0 +1,16 @@
+<main .jumbotron>
+    <div .container>
+        <div .row>
+            <h2 .join-msg.text-center.col-sm-12>Log In
+        <div .row>
+            <form action="@{action}" method="post">
+                $maybe tok <- mtok
+                   <input type=hidden name=#{defaultCsrfParamName} value=#{tok}>
+                <div .form-group.required>
+                    <label for="username">Username
+                    <input #username .form-control name="username" type="text">
+                <div .form-group.required>
+                    <label for="password">Password
+                    <input #password .form-control name="password" type="password">
+                <div .text-center">
+                    <button type="submit" .btn.btn-primary.col-sm-12">Submit</button>

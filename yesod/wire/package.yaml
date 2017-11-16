@@ -1,5 +1,5 @@
 name:    wire
-version: "0.0.0"
+version: "0.0.1"
 
 dependencies:
 
@@ -13,6 +13,7 @@ dependencies:
 - yesod >=1.4.3 && <1.5
 - yesod-core >=1.4.30 && <1.5
 - yesod-auth >=1.4.0 && <1.5
+- yesod-auth-hashdb >=1.6.2 && <1.7
 - yesod-static >=1.4.0.3 && <1.6
 - yesod-form >=1.4.0 && <1.5
 - classy-prelude >=0.10.2
