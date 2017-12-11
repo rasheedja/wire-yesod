@@ -26,7 +26,6 @@ getSignupR = do
     (formWidget, formEnctype) <- generateFormPost signupForm
     defaultLayout $ do
         setTitle "Wire - Sign Up"
-        setSession "msgrendered" "true"
         $(widgetFile "signup")
 
 postSignupR :: Handler Html
@@ -35,12 +34,15 @@ postSignupR = do
     case result of
         FormSuccess user -> do
             void $ runDB . insert =<< setPassword (userPassword user) user
+            setSession "msgrendered" "true"
             setMessage $ renderSuccessMessage $ "Welcome to Wire, " <> (userUsername user)
             redirect HomeR
         FormFailure errors -> do
             let renderedMessages = map renderErrorMessage errors
+            setSession "msgrendered" "true"
             setMessage $ toHtml renderedMessages
             redirect SignupR
         FormMissing -> do
+            setSession "msgrendered" "true"
             setMessage $ renderErrorMessage "Form is missing"
             redirect SignupR
