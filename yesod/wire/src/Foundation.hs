@@ -20,6 +20,8 @@ import Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
 import qualified Data.CaseInsensitive as CI
 import qualified Data.Text.Encoding as TE
+import Text.Blaze.Html5 as H
+import Text.Blaze.Html5.Attributes as A
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -90,11 +92,13 @@ instance Yesod App where
     yesodMiddleware = defaultYesodMiddleware
 
     defaultLayout widget = do
+
         master <- getYesod
         mmsg <- getMessage
-
+        mmsgrendered <- lookupSession "msgrendered"
         muser <- maybeAuthPair
         mcurrentRoute <- getCurrentRoute
+        deleteSession "msgrendered"
 
         -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
         (title, parents) <- breadcrumbs
@@ -237,6 +241,34 @@ isAuthenticated = do
     return $ case muid of
         Nothing -> Unauthorized "You must login to access this page"
         Just _ -> Authorized
+
+renderErrorMessage :: Text -> Html
+renderErrorMessage msg = do
+    H.div ! A.class_ "alert alert-danger col-sm-12" $ do
+        H.a ! A.class_ "close" ! A.href "#" !  dataAttribute "dismiss" "alert" $ do
+            H.span "×"
+        H.span $ H.toHtml msg
+
+renderSuccessMessage :: Text -> Html
+renderSuccessMessage msg = do
+    H.div ! A.class_ "alert alert-success col-sm-12" $ do
+        H.a ! A.class_ "close" ! A.href "#" !  dataAttribute "dismiss" "alert" $ do
+            H.span "×"
+        H.span $ H.toHtml msg
+
+renderWarningMessage :: Text -> Html
+renderWarningMessage msg = do
+    H.div ! A.class_ "alert alert-warning col-sm-12" $ do
+        H.a ! A.class_ "close" ! A.href "#" !  dataAttribute "dismiss" "alert" $ do
+            H.span "×"
+        H.span $ H.toHtml msg
+
+renderInfoMessage :: Text -> Html
+renderInfoMessage msg = do
+    H.div ! A.class_ "alert alert-info col-sm-12" $ do
+        H.a ! A.class_ "close" ! A.href "#" !  dataAttribute "dismiss" "alert" $ do
+            H.span "×"
+        H.span $ H.toHtml msg
 
 instance YesodAuthPersist App
 

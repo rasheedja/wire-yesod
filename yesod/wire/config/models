@@ -3,4 +3,5 @@ User
     email    Text Eq
     password Text
     UniqueUser username
+    UniqueEmail email
     deriving Typeable Show

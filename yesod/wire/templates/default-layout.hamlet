@@ -30,9 +30,12 @@
                 <li .breadcrumb-item.active>#{title}
 
     $maybe msg <- mmsg
-        <div .alert.alert-info.alert-dismissible.col-sm-12 #message>
-            <a href="#" .close data-dismiss="alert">&times;
+        $maybe msgrendered <- mmsgrendered
             #{msg}
+        $nothing
+            <div .alert.alert-info.alert-dismissible.col-sm-12 #message>
+                <a href="#" .close data-dismiss="alert">&times;
+                #{msg}
 
 
 ^{widget}
