@@ -1,6 +1,6 @@
 <!-- Static navbar -->
 <nav .navbar.navbar-inverse.navbar-static-top>
-    <div .container-fluid>
+    <div .container>
         <div .navbar-header>
             <a .navbar-brand href="#">Wire
             <button .navbar-toggle.collapse type="button" data-toggle="collapse" data-target="#navbarSupportedContent">

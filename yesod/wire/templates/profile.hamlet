@@ -1,10 +1,44 @@
-<div .ui.container>
-
-    <h1>
-      Access granted!
-
-    <p>
-      This page is protected and access is allowed only for authenticated users.
-
-    <p>
-      Your data is protected with us <strong><span class="username">#{userUsername user}</span></strong>!
+<main>
+    <!-- The new wire modal -->
+    <div #create-wire-modal .modal .fade tabindex="-1" role="dialog">
+        <div .modal-dialog role="document">
+            <div .modal-content>
+                <div .modal-header>
+                    <button .close type="button" data-dismiss="modal">
+                        <span>
+                            &times;
+                    <h4 .modal-title>
+                        Create Wire
+                <div .modal-body>
+                    <p>
+                        Put input thingy here with form
+                    <div .modal-footer>
+                        <button .btn .btn-default  type="button" data-dismiss="modal">
+                            Close
+                        <button .btn .btn-primary  type="button">
+                            Submit Wire
+    <div .container>
+        <div .row>
+            <div .col-sm-2 .user-info>
+                <h3>
+                    #{userUsername user}'s Page
+                <button .btn .btn-primary .create-wire type="button" data-toggle="modal" data-target="#create-wire-modal">
+                    New Wire
+            <div .col-sm-7 .user-wires>
+                <ul .list-group>
+                    <li .list-group-item>
+                        <h3>
+                            Wires
+                    <li .list-group-item>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <li .list-group-item>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <li .list-group-item>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <div .col-sm-3 .wire-recommends>
+                <ul .list-group>
+                    <li .list-group-item>
+                        <h3>Recommendations
+                    <li .list-group-item>
+                        <span>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
