@@ -6,4 +6,4 @@
 
 / HomeR GET
 /signup SignupR GET POST
-/profile ProfileR GET
+/profile ProfileR GET POST

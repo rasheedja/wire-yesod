@@ -5,3 +5,9 @@ User
     UniqueUser username
     UniqueEmail email
     deriving Typeable Show
+
+Message
+    message Text
+    userId UserId
+    created UTCTime default=CURRENT_TIMESTAMP
+    deriving Typeable Show

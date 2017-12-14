@@ -6,7 +6,20 @@
 module Handler.Profile where
 
 import Import
+import Yesod.Form.Bootstrap3
 
+messageForm :: UserId -> Form Message
+messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
+    <$> areq textField (bfs ("Message" :: Text)) Nothing
+    <*> pure userId
+    <*> lift (liftIO getCurrentTime)
+
+-- Look up the 'username' GET parameter. If one is given, check if the username
+-- exists in the database. If it is a valid username, render the given user's
+-- profile page. If no username is given, render the current users profile page
+-- if a user is logged in. If the rendered profile page is the page of the
+-- logged in user, allow the user to create new wires on the page. If an invalid
+-- username is given, redirect the user to the user search page
 getProfileR :: Handler Html
 getProfileR = do
     maybeUsername <- lookupGetParam "username"
@@ -14,10 +27,25 @@ getProfileR = do
         Just username -> do
             maybeUser <- runDB $ getBy $ UniqueUser username
             case maybeUser of
-                Just (Entity userId user) ->
-                    defaultLayout $ do
-                        setTitle . toHtml $ userUsername user
-                        $(widgetFile "profile")
+                Just (Entity userId user) -> do
+                    maybeLoggedInUser <- maybeAuth
+                    messages <- runDB $ selectList [MessageUserId ==. userId] []
+                    case maybeLoggedInUser of
+                        Just (Entity loggedInUserId _) -> do
+                            if loggedInUserId == userId
+                                then do
+                                    (formWidget, formEnctype) <- generateFormPost $ messageForm userId
+                                    defaultLayout $ do
+                                        setTitle . toHtml $ userUsername user
+                                        $(widgetFile "currentprofile")
+                                else
+                                    defaultLayout $ do
+                                        setTitle . toHtml $ userUsername user
+                                        $(widgetFile "profile")
+                        Nothing -> do
+                            defaultLayout $ do
+                                setTitle . toHtml $ userUsername user
+                                $(widgetFile "profile")
                 Nothing -> do
                     defaultLayout $ do
                         -- TODO: Redirect to user search page
@@ -27,13 +55,36 @@ getProfileR = do
         Nothing -> do
             maybeUser <- maybeAuth
             case maybeUser of
-                Just (Entity userId user) ->
+                Just (Entity userId user) -> do
+                    (formWidget, formEnctype) <- generateFormPost $ messageForm userId
+                    messages <- runDB $ selectList [MessageUserId ==. userId] [Desc MessageCreated]
                     defaultLayout $ do
                         setTitle . toHtml $ userUsername user
-                        $(widgetFile "profile")
+                        $(widgetFile "currentprofile")
                 Nothing -> do
                     -- TODO: Redirect to user search page
                     defaultLayout $ do
                         setSession "msgrendered" "true"
                         setMessage $ renderErrorMessage "Please enter a username"
                         redirect HomeR
+
+-- Create a new wire for the logged in user
+postProfileR :: Handler Html
+postProfileR = do
+    (Entity userId _) <- requireAuth
+    ((result, _), _) <- runFormPost $ messageForm userId
+    case result of
+        FormSuccess message -> do
+            void $ runDB . insert $ message
+            setSession "msgrendered" "true"
+            setMessage $ renderSuccessMessage $ "Wire Sent"
+            redirect ProfileR
+        FormFailure errors -> do
+            let renderedMessages = map renderErrorMessage errors
+            setSession "msgrendered" "true"
+            setMessage $ toHtml renderedMessages
+            redirect ProfileR
+        FormMissing -> do
+            setSession "msgrendered" "true"
+            setMessage $ renderErrorMessage "Form is missing"
+            redirect ProfileR

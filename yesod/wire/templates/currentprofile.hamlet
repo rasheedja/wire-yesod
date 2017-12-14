@@ -1,9 +1,29 @@
 <main>
+    <!-- The new wire modal -->
+    <div #create-wire-modal .modal .fade tabindex="-1" role="dialog">
+        <div .modal-dialog role="document">
+            <div .modal-content>
+                <div .modal-header>
+                    <button .close type="button" data-dismiss="modal">
+                        <span>
+                            &times;
+                    <h4 .modal-title>
+                        Create Wire
+                <div .modal-body>
+                    <form #create-wire-form .create-wire-form role=form method=post action=@{ProfileR} enctype=#{formEnctype}>
+                        ^{formWidget}
+                    <div .modal-footer>
+                        <button .btn .btn-default  type="button" data-dismiss="modal">
+                            Close
+                        <button .btn .btn-primary  type="submit" form="create-wire-form">
+                            Submit Wire
     <div .container>
         <div .row>
             <div .col-sm-2 .user-info>
                 <h3>
                     #{userUsername user}'s Page
+                <button .btn .btn-primary .create-wire type="button" data-toggle="modal" data-target="#create-wire-modal">
+                    New Wire
             <div .col-sm-7 .user-wires>
                 <ul .list-group>
                     <li .list-group-item>
@@ -11,7 +31,7 @@
                             Wires
                     $if null messages
                         <li .list-group-item>
-                            This user has not created any wires
+                            You have not created any wires
                     $else
                         $forall Entity _ message <- messages
                             <li .list-group-item>
