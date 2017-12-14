@@ -15,7 +15,7 @@ signupForm :: Form User
 signupForm = renderBootstrap3 BootstrapBasicForm $ User
     <$> areq (checkM uniqueUsername textField) (bfs ("Username" :: Text)) Nothing
     <*> areq (checkM uniqueEmail emailField) (bfs ("Email" :: Text)) Nothing
-    <*> areq passwordField (bfs ("Passowrd" :: Text)) Nothing
+    <*> areq passwordField (bfs ("Password" :: Text)) Nothing
     where
         uniqueUsername name = checkUserData name ("The username \"" <> name <> "\" is already in use!") $ getBy $ UniqueUser name
         uniqueEmail email = checkUserData email ("The email \"" <> email <>"\" is already in use!") $ getBy $ UniqueEmail email
