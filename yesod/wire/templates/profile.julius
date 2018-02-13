@@ -1,0 +1,29 @@
+$(document).ready(function() {
+    $(function () {
+        // Retrieve messages to display on the front end
+        $.ajax(
+            {
+                url: "@{MessageR}?username=#{jsUsername}",
+                type: "GET",
+                success: function (result) {
+                    var messagesHeader = $("#messages-header");
+                    // Display a message if the user has not posted any messages
+                    if (result.length === 0) {
+                        messagesHeader.nextAll('li').remove();
+                        messagesHeader.after("<li class='list-group-item'>This user has not created any wires</li>")
+                    } else {
+                        // Display messages if we received a result from the server
+                        var messagesHtml = "";
+                        $.each(result, function(index, messageObject) {
+                            messagesHtml += "<li class='list-group-item'>" + messageObject.message + "</li>";
+                        });
+                        if (messagesHtml !== "") {
+                            messagesHeader.nextAll('li').remove();
+                            messagesHeader.after(messagesHtml);
+                        }
+                    }
+                }
+            }
+        )
+    })
+});

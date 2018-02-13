@@ -7,6 +7,7 @@ module Handler.Profile where
 
 import Import
 import Yesod.Form.Bootstrap3
+import Text.Julius
 
 messageForm :: UserId -> Form Message
 messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
@@ -25,11 +26,11 @@ getProfileR = do
     maybeUsername <- lookupGetParam "username"
     case maybeUsername of
         Just username -> do
+            let jsUsername = rawJS username
             maybeUser <- runDB $ getBy $ UniqueUser username
             case maybeUser of
                 Just (Entity userId user) -> do
                     maybeLoggedInUser <- maybeAuth
-                    messages <- runDB $ selectList [MessageUserId ==. userId] []
                     case maybeLoggedInUser of
                         Just (Entity loggedInUserId _) -> do
                             if loggedInUserId == userId
@@ -56,8 +57,8 @@ getProfileR = do
             maybeUser <- maybeAuth
             case maybeUser of
                 Just (Entity userId user) -> do
+                    let jsUsername = rawJS $ userUsername user
                     (formWidget, formEnctype) <- generateFormPost $ messageForm userId
-                    messages <- runDB $ selectList [MessageUserId ==. userId] [Desc MessageCreated]
                     defaultLayout $ do
                         setTitle . toHtml $ userUsername user
                         $(widgetFile "currentprofile")

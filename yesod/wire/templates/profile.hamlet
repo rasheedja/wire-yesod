@@ -6,16 +6,11 @@
                     #{userUsername user}'s Page
             <div .col-sm-7 .user-wires>
                 <ul .list-group>
-                    <li .list-group-item>
+                    <li .list-group-item #messages-header>
                         <h3>
                             Wires
-                    $if null messages
-                        <li .list-group-item>
-                            This user has not created any wires
-                    $else
-                        $forall Entity _ message <- messages
-                            <li .list-group-item>
-                                #{messageMessage message}
+                    <li .list-group-item>
+                        <div .loader>
             <div .col-sm-3 .wire-recommends>
                 <ul .list-group>
                     <li .list-group-item>
