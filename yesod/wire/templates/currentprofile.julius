@@ -25,5 +25,31 @@ $(document).ready(function() {
                 }
             }
         )
+    });
+
+    $(function () {
+        // Retrieve messages to display on the front end
+        $.ajax(
+            {
+                url: "@{UserR}",
+                type: "GET",
+                success: function (result) {
+                    console.log(result);
+                    // Display messages if we received a result from the server
+                    var usersHTML = "";
+                    var recommendedUsersHeader = $("#recommended-users-header");
+                    $.each(result, function(index, userObject) {
+                        usersHTML += "<li class='list-group-item clearfix'>";
+                        usersHTML += "<span>" + userObject.username + "" + "</span>";
+                        usersHTML += "<span class='pull-right'><a href='" + userObject.id + "' class='btn btn-default'>Follow</a></span>";
+                        usersHTML += "</li>";
+                    });
+                    if (usersHTML !== "") {
+                        recommendedUsersHeader.nextAll('li').remove();
+                        recommendedUsersHeader.after(usersHTML);
+                    }
+                }
+            }
+        )
     })
 });

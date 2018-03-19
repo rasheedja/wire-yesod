@@ -8,3 +8,4 @@
 /signup SignupR GET POST
 /profile ProfileR GET POST
 /message MessageR GET
+/user UserR GET
