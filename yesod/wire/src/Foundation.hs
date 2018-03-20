@@ -161,10 +161,13 @@ instance Yesod App where
     isAuthorized MessageR  _ = return Authorized
     isAuthorized UserR  _ = return Authorized
     isAuthorized SignupR _ = return Authorized
+    isAuthorized FollowingR _ = isAuthenticated
+    isAuthorized FollowersR _ = isAuthenticated
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
     isAuthorized (StaticR _) _ = return Authorized
 
+    isAuthorized FollowR _ = isAuthenticated
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows

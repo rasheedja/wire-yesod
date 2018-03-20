@@ -20,7 +20,11 @@ getMessageR = do
                     messages <- runDB $ selectList [MessageUserId ==. userId] []
                     returnJson messages
                 Nothing -> do
-                    returnJson $ object []
+                    returnJson $ object ["message" .= message]
+                    where
+                        message = "The given user was not found" :: Text
         Nothing -> do
-            returnJson $ object []
+            returnJson $ object ["message" .= message]
+            where
+                message = "A username must be provided" :: Text
 

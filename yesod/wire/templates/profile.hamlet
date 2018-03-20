@@ -1,10 +1,22 @@
 <main>
     <div .container>
         <div .row>
-            <div .col-sm-2 .user-info>
-                <h3>
-                    #{userUsername user}'s Page
-            <div .col-sm-7 .user-wires>
+            <div .col-sm-3 .user-info>
+                <ul .list-group>
+                    <li .list-group-item>
+                        <h3>
+                            #{userUsername user}'s Page
+                <ul .list-group #following>
+                    <li .list-group-item #recommended-users-header2>
+                        <h3>Following
+                    <li .list-group-item>
+                        <div .loader>
+                <ul .list-group #followers>
+                    <li .list-group-item #recommended-users-header2>
+                        <h3>Followers
+                    <li .list-group-item>
+                        <div .loader>
+            <div .col-sm-6 .user-wires>
                 <ul .list-group>
                     <li .list-group-item #messages-header>
                         <h3>

@@ -41,7 +41,7 @@ $(document).ready(function() {
                     $.each(result, function(index, userObject) {
                         usersHTML += "<li class='list-group-item clearfix'>";
                         usersHTML += "<span>" + userObject.username + "" + "</span>";
-                        usersHTML += "<span class='pull-right'><a href='" + userObject.id + "' class='btn btn-default'>Follow</a></span>";
+                        usersHTML += "<span class='pull-right'><a href='/follow?username=" + userObject.username + "' class='btn btn-default'>Follow</a></span>";
                         usersHTML += "</li>";
                     });
                     if (usersHTML !== "") {

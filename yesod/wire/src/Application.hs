@@ -44,6 +44,9 @@ import Handler.Profile
 import Handler.Signup
 import Handler.Message
 import Handler.User
+import Handler.Follow
+import Handler.Following
+import Handler.Followers
 
 
 -- This line actually creates our YesodDispatch instance. It is the second half

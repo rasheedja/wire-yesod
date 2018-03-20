@@ -1,4 +1,4 @@
-User json
+User json key
     username Text Eq
     email    Text Eq
     password Text
@@ -10,4 +10,9 @@ Message json
     message Text
     userId UserId
     created UTCTime default=CURRENT_TIMESTAMP
+    deriving Typeable Show
+
+Follow json
+    followerId UserId
+    followingId UserId
     deriving Typeable Show

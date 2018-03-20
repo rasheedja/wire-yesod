@@ -16,3 +16,7 @@ body div.loader {
   100% { transform: rotate(360deg); }
 }
 
+#following,
+#followers {
+    margin-top: 20px;
+}
