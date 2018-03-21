@@ -13,6 +13,6 @@
 /user/#Text UserGetAllExcludingUsernameR GET
 /users/*[UserId] UserGetIdsR GET
 
-/follow FollowR GET
-/following FollowingR GET
-/followers FollowersR GET
+/follow/#Text FollowR GET
+/following/#Text FollowingR GET
+/followers/#Text FollowersR GET

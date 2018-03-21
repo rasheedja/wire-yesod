@@ -7,45 +7,36 @@ module Handler.Follow where
 
 
 import Import
-import Data.Aeson
 
-getFollowR :: Handler Value
-getFollowR = do
-    maybeFollowingName <- lookupGetParam "username"
-    case maybeFollowingName of
-        Just followingName -> do
-            maybeFollowingUser <- runDB $ selectFirst [UserUsername ==. followingName] []
+getFollowR :: Text -> Handler Value
+getFollowR username = do
+    maybeUser <- maybeAuth
+    case maybeUser of
+        Just (Entity userId _) -> do
+            maybeFollowingUser <- runDB $ selectFirst [UserUsername ==. username] []
             case maybeFollowingUser of
                 Just (Entity followingUserId _) -> do
-                    maybeUser <- maybeAuth
-                    case maybeUser of
-                        Just (Entity userId _) -> do
-                            maybeFollowing <- runDB $ selectFirst [FollowFollowerId ==. userId, FollowFollowingId ==. followingUserId] []
-                            case maybeFollowing of
-                                Just _ -> do
-                                    runDB $ deleteWhere [FollowFollowerId ==. userId, FollowFollowingId ==. followingUserId]
-                                    returnJson $ object ["success" .= success, "message" .= message]
-                                    where
-                                        success = True :: Bool
-                                        message = "You have successfully unfollowed " ++ followingName :: Text
-                                Nothing -> do
-                                    runDB $ insert $ Follow userId followingUserId
-                                    returnJson $ object ["success" .= success, "message" .= message]
-                                    where
-                                        success = True :: Bool
-                                        message = "You have successfully followed " ++ followingName :: Text
-                        Nothing -> do
+                    maybeFollowing <- runDB $ selectFirst [FollowFollowerId ==. userId, FollowFollowingId ==. followingUserId] []
+                    case maybeFollowing of
+                        Just _ -> do
+                            _ <- runDB $ deleteWhere [FollowFollowerId ==. userId, FollowFollowingId ==. followingUserId]
                             returnJson $ object ["success" .= success, "message" .= message]
                             where
-                                success = False :: Bool
-                                message = "You must be logged in to follow a user" :: Text
+                                success = True :: Bool
+                                message = "You have successfully unfollowed " ++ username :: Text
+                        Nothing -> do
+                            _ <- runDB $ insert $ Follow userId followingUserId
+                            returnJson $ object ["success" .= success, "message" .= message]
+                            where
+                                success = True :: Bool
+                                message = "You have successfully followed " ++ username :: Text
                 Nothing -> do
                     returnJson $ object ["success" .= success, "message" .= message]
                     where
                         success = False :: Bool
                         message = "The user you tried to follow was not found" :: Text
-        Nothing ->
+        Nothing -> do
             returnJson $ object ["success" .= success, "message" .= message]
             where
                 success = False :: Bool
-                message = "The ID of a user to follow must be given" :: Text
+                message = "You must be logged in to follow a user" :: Text
