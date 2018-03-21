@@ -8,7 +8,11 @@
 /signup SignupR GET POST
 /profile ProfileR GET POST
 /message MessageR GET
-/user UserR GET POST
+
+/user UserGetAllR GET
+/user/#Text UserGetAllExcludingUsernameR GET
+/users/*[UserId] UserGetIdsR GET
+
 /follow FollowR GET
 /following FollowingR GET
 /followers FollowersR GET

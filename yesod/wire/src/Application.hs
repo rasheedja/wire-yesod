@@ -43,7 +43,9 @@ import Handler.Home
 import Handler.Profile
 import Handler.Signup
 import Handler.Message
-import Handler.User
+import Handler.UserGetAll
+import Handler.UserGetAllExcludingUsername
+import Handler.UserGetIds
 import Handler.Follow
 import Handler.Following
 import Handler.Followers
