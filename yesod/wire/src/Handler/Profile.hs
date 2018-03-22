@@ -57,7 +57,8 @@ getProfileR = do
             maybeUser <- maybeAuth
             case maybeUser of
                 Just (Entity userId user) -> do
-                    let jsUsername = rawJS $ userUsername user
+                    let username = userUsername user
+                    let jsUsername = rawJS username
                     (formWidget, formEnctype) <- generateFormPost $ messageForm userId
                     defaultLayout $ do
                         setTitle . toHtml $ userUsername user

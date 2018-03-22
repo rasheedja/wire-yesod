@@ -7,12 +7,12 @@
                         <h3>
                             #{userUsername user}'s Page
                 <ul .list-group #following>
-                    <li .list-group-item #recommended-users-header2>
+                    <li .list-group-item #following-header>
                         <h3>Following
                     <li .list-group-item>
                         <div .loader>
                 <ul .list-group #followers>
-                    <li .list-group-item #recommended-users-header2>
+                    <li .list-group-item #followers-header>
                         <h3>Followers
                     <li .list-group-item>
                         <div .loader>

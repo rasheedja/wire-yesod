@@ -1,55 +1,217 @@
 $(document).ready(function() {
-    $(function () {
-        // Retrieve messages to display on the front end
-        $.ajax(
-            {
-                url: "@{MessageR}?username=#{jsUsername}",
-                type: "GET",
-                success: function (result) {
-                    var messagesHeader = $("#messages-header");
-                    // Display a message if the user has not posted any messages
-                    if (result.length === 0) {
-                        messagesHeader.nextAll('li').remove();
-                        messagesHeader.after("<li class='list-group-item'>This user has not created any wires</li>")
-                    } else {
-                        // Display messages if we received a result from the server
-                        var messagesHtml = "";
-                        $.each(result, function(index, messageObject) {
-                            messagesHtml += "<li class='list-group-item'>" + messageObject.message + "</li>";
-                        });
-                        if (messagesHtml !== "") {
+    function loadMessages() {
+        $(function () {
+            // Retrieve messages to display on the front end
+            $.ajax(
+                {
+                    url: "@{MessageR}?username=#{jsUsername}",
+                    type: "GET",
+                    success: function (result) {
+                        var messagesHeader = $("#messages-header");
+                        // Display a message if the user has not posted any messages
+                        if (result.length === 0) {
                             messagesHeader.nextAll('li').remove();
-                            messagesHeader.after(messagesHtml);
+                            messagesHeader.after("<li class='list-group-item'>This user has not created any wires</li>")
+                        } else {
+                            // Display messages if we received a result from the server
+                            var messagesHtml = "";
+                            $.each(result, function(index, messageObject) {
+                                messagesHtml += "<li class='list-group-item'>" + messageObject.message + "</li>";
+                            });
+                            if (messagesHtml !== "") {
+                                messagesHeader.nextAll('li').remove();
+                                messagesHeader.after(messagesHtml);
+                            }
                         }
                     }
                 }
-            }
-        )
-    });
+            )
+        });
+    }
 
-    $(function () {
-        // Retrieve messages to display on the front end
-        $.ajax(
-            {
-                url: "@{UserGetAllR}",
-                type: "GET",
-                success: function (result) {
-                    console.log(result);
-                    // Display messages if we received a result from the server
-                    var usersHTML = "";
-                    var recommendedUsersHeader = $("#recommended-users-header");
-                    $.each(result, function(index, userObject) {
-                        usersHTML += "<li class='list-group-item clearfix'>";
-                        usersHTML += "<span>" + userObject.username + "" + "</span>";
-                        usersHTML += "<span class='pull-right'><a href='/follow?username=" + userObject.username + "' class='btn btn-default'>Follow</a></span>";
-                        usersHTML += "</li>";
-                    });
-                    if (usersHTML !== "") {
+    function loadRecommendedUsers() {
+        $(function () {
+            // Retrieve other users to display on the frontend
+            $.ajax(
+                {
+                    url: "@{UserGetAllExcludingFollowingR}",
+                    type: "GET",
+                    success: function (result) {
+                        var usersHTML = "";
+                        var recommendedUsersHeader = $("#recommended-users-header");
+
+                        result.forEach(function(userObject) {
+                            usersHTML += "<li class='list-group-item clearfix'>";
+                            usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
+                            usersHTML += "<span class='pull-right'><a href='#' id='follow-" + userObject.username + "' class='btn btn-default follow-button'>Follow</a></span>";
+                            usersHTML += "</li>";
+                        });
+
+                        if (usersHTML === "") {
+                            usersHTML += "<li class='list-group-item clearfix'>";
+                            usersHTML += "<span>There are no users to recommend at this time</span>";
+                            usersHTML += "</li>";
+                        }
+
                         recommendedUsersHeader.nextAll('li').remove();
                         recommendedUsersHeader.after(usersHTML);
+
+                        $('.follow-button').click(function() {
+                            var element = this;
+                            var username = element.id.split('-')[1];
+
+                            $.ajax(
+                                {
+                                    url: "/follow/" + username + "/",
+                                    types: "GET",
+                                    success: function (result) {
+                                        console.log(result);
+                                        console.log(element);
+                                        element.classList.add('btn-success');
+                                        element.classList.add('disabled');
+                                        element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>';
+                                        loadRecommendedUsers();
+                                        loadFollows();
+                                    }
+                                }
+                            )
+                        })
                     }
                 }
-            }
-        )
-    })
+            )
+        });
+    }
+
+
+    function loadFollows() {
+        $(function () {
+            // Retrieve people followed by the current user to display on the front end
+            $.ajax(
+                {
+                    url: "@{FollowingR username}",
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success && result.success !== undefined) {
+                            console.log(result.message)
+                        } else {
+                            var usersHTML = "";
+                            var followingHeader = $("#following-header");
+
+                            if (result.length !== 0) {
+                                // Store following user Ids in an array
+                                var followingUserIds = [];
+                                result.forEach(function (followInfo) {
+                                    followingUserIds.push(followInfo.followingId);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: "/users/" + followingUserIds.join('/'),
+                                        type: "GET",
+                                        success: function (result) {
+                                            result.forEach(function(userObject) {
+                                                usersHTML += "<li class='list-group-item clearfix'>";
+                                                usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
+                                                usersHTML += "<span class='pull-right'><a href='#' id='unfollow-" + userObject.username + "' class='btn btn-danger unfollow-button'>Unfollow</a></span>";
+                                                usersHTML += "</li>";
+                                            });
+
+                                            followingHeader.nextAll('li').remove();
+                                            followingHeader.after(usersHTML);
+
+                                            $('.unfollow-button').click(function() {
+                                                var element = this;
+                                                var username = element.id.split('-')[1];
+
+                                                $.ajax(
+                                                    {
+                                                        url: "/follow/" + username + "/",
+                                                        types: "GET",
+                                                        success: function (result) {
+                                                            console.log(result);
+                                                            console.log(element);
+                                                            element.classList.add('btn-success');
+                                                            element.classList.add('disabled');
+                                                            element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>'
+                                                            loadRecommendedUsers();
+                                                            loadFollows();
+                                                        }
+                                                    }
+                                                )
+                                            })
+                                        }
+                                    }
+                                )
+                            } else {
+                                usersHTML += "<li class='list-group-item clearfix'>";
+                                usersHTML += "<span>This user is not following anyone</span>";
+                                usersHTML += "</li>";
+
+                                followingHeader.nextAll('li').remove();
+                                followingHeader.after(usersHTML);
+                            }
+                        }
+                    }
+                }
+            )
+        });
+    }
+
+    function loadFollowers() {
+        $(function () {
+            // Retrieve people followed by the current user to display on the front end
+            $.ajax(
+                {
+                    url: "@{FollowersR username}",
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success && result.success !== undefined) {
+                            console.log(result.message)
+                        } else {
+                            var followersHeader = $("#followers-header");
+                            var usersHTML = "";
+
+                            if (result.length !== 0) {
+                                // Store follower user Ids in an array
+                                var followerUserIds = [];
+                                result.forEach(function (followInfo) {
+                                    followerUserIds.push(followInfo.followerId);
+                                });
+
+                                $.ajax(
+                                    {
+                                        url: "/users/" + followerUserIds.join('/'),
+                                        type: "GET",
+                                        success: function (result) {
+                                            result.forEach(function (userObject) {
+                                                usersHTML += "<li class='list-group-item clearfix'>";
+                                                usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
+                                                usersHTML += "<span class='pull-right'><a href='/profile?username=" + userObject.username + "' class='btn btn-default'>Visit</a></span>";
+                                                usersHTML += "</li>";
+                                            });
+
+                                            followersHeader.nextAll('li').remove();
+                                            followersHeader.after(usersHTML);
+                                        }
+                                    }
+                                )
+                            } else {
+                                usersHTML += "<li class='list-group-item clearfix'>";
+                                usersHTML += "<span>This user does not have any followers</span>";
+                                usersHTML += "</li>";
+
+                                followersHeader.nextAll('li').remove();
+                                followersHeader.after(usersHTML);
+                            }
+                        }
+                    }
+                }
+            )
+        });
+    }
+
+    loadMessages();
+    loadRecommendedUsers();
+    loadFollows();
+    loadFollowers();
 });

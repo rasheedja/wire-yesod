@@ -162,6 +162,7 @@ instance Yesod App where
     isAuthorized UserGetAllR _ = return Authorized
     isAuthorized (UserGetIdsR _) _ = return Authorized
     isAuthorized (UserGetAllExcludingUsernameR _) _ = return Authorized
+    isAuthorized UserGetAllExcludingFollowingR _ = return Authorized
     isAuthorized SignupR _ = return Authorized
     isAuthorized (FollowingR _) _ = return Authorized
     isAuthorized (FollowersR _) _ = return Authorized

@@ -10,6 +10,7 @@
 /message MessageR GET
 
 /user UserGetAllR GET
+/user-not-following UserGetAllExcludingFollowingR GET
 /user/#Text UserGetAllExcludingUsernameR GET
 /users/*[UserId] UserGetIdsR GET
 
