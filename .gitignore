@@ -19,3 +19,5 @@ cabal.sandbox.config
 *~
 \#*
 wire.cabal
+.idea/
+
