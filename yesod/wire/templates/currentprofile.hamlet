@@ -10,7 +10,7 @@
                     <h4 .modal-title>
                         Create Wire
                 <div .modal-body>
-                    <form #create-wire-form .create-wire-form role=form method=post action=@{ProfileR} enctype=#{formEnctype}>
+                    <form #create-wire-form .create-wire-form role=form method=post action=@{MyProfileR} enctype=#{formEnctype}>
                         ^{formWidget}
                     <div .modal-footer>
                         <button .btn .btn-default  type="button" data-dismiss="modal">
@@ -23,10 +23,13 @@
                 <ul .list-group>
                     <li .list-group-item>
                         <h3>
-                            #{userUsername user}'s Page
+                            Your Page
                     <li .list-group-item>
                         <button .btn .btn-primary .create-wire type="button" data-toggle="modal" data-target="#create-wire-modal">
                             New Wire
+                    <li .list-group-item>
+                        <a href="@{ProfileR username}">
+                            See how your profile page looks like to others
                 <ul .list-group #following>
                     <li .list-group-item #following-header>
                         <h3>Following
@@ -41,7 +44,7 @@
                 <ul .list-group>
                     <li .list-group-item #messages-header>
                         <h3>
-                            Wires
+                            Your Feed
                     <li .list-group-item>
                         <div .loader>
             <div .col-sm-3 #recommended-users>

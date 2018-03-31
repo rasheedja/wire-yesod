@@ -112,7 +112,7 @@ instance Yesod App where
                     }
                 , NavbarLeft $ MenuItem
                     { menuItemLabel = "Profile"
-                    , menuItemRoute = ProfileR
+                    , menuItemRoute = MyProfileR
                     , menuItemAccessCallback = isJust muser
                     }
                 , NavbarRight $ MenuItem
@@ -157,8 +157,9 @@ instance Yesod App where
     -- Routes not requiring authentication.
     isAuthorized (AuthR _) _ = return Authorized
     isAuthorized HomeR _ = return Authorized
-    isAuthorized ProfileR _ = return Authorized
+    isAuthorized (ProfileR _) _ = return Authorized
     isAuthorized MessageR _ = return Authorized
+    isAuthorized (MessagesR _) _ = return Authorized
     isAuthorized UserGetAllR _ = return Authorized
     isAuthorized (UserGetIdsR _) _ = return Authorized
     isAuthorized (UserGetAllExcludingUsernameR _) _ = return Authorized
@@ -170,6 +171,7 @@ instance Yesod App where
     isAuthorized RobotsR _ = return Authorized
     isAuthorized (StaticR _) _ = return Authorized
 
+    isAuthorized MyProfileR _ = isAuthenticated
     isAuthorized (FollowR _) _ = isAuthenticated
 
     -- This function creates static content files in the static folder
@@ -204,7 +206,8 @@ instance Yesod App where
 instance YesodBreadcrumbs App where
   breadcrumb HomeR = return ("Home", Nothing)
   breadcrumb (AuthR _) = return ("Login", Just HomeR)
-  breadcrumb ProfileR = return ("Profile", Just HomeR)
+  breadcrumb (ProfileR _) = return ("Profile", Just HomeR)
+  breadcrumb MyProfileR = return ("Profile", Just HomeR)
   breadcrumb SignupR = return ("Sign Up", Just HomeR)
   breadcrumb  _ = return ("home", Nothing)
 

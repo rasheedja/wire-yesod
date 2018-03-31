@@ -4,7 +4,7 @@ $(document).ready(function() {
             // Retrieve messages to display on the front end
             $.ajax(
                 {
-                    url: "@{MessageR}?username=#{jsUsername}",
+                    url: "@{MessagesR followIds}",
                     type: "GET",
                     success: function (result) {
                         var messagesHeader = $("#messages-header");

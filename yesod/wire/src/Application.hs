@@ -41,8 +41,10 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
 import Handler.Common
 import Handler.Home
 import Handler.Profile
+import Handler.MyProfile
 import Handler.Signup
 import Handler.Message
+import Handler.Messages
 import Handler.UserGetAll
 import Handler.UserGetAllExcludingUsername
 import Handler.UserGetAllExcludingFollowing

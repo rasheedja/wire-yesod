@@ -6,8 +6,12 @@
 
 / HomeR GET
 /signup SignupR GET POST
-/profile ProfileR GET POST
+
 /message MessageR GET
+/messages/*[UserId] MessagesR GET
+
+/profile MyProfileR GET POST
+/profile/#Text ProfileR GET
 
 /user UserGetAllR GET
 /user-not-following UserGetAllExcludingFollowingR GET

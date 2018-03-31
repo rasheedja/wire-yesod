@@ -9,6 +9,7 @@ module Handler.Message where
 import Import
 import Data.Aeson
 
+-- Get all the messages posted by the given user
 getMessageR :: Handler Value
 getMessageR = do
     maybeUsername <- lookupGetParam "username"
