@@ -158,7 +158,7 @@ instance Yesod App where
     isAuthorized (AuthR _) _ = return Authorized
     isAuthorized HomeR _ = return Authorized
     isAuthorized (ProfileR _) _ = return Authorized
-    isAuthorized MessageR _ = return Authorized
+    isAuthorized (MessageR _) _ = return Authorized
     isAuthorized (MessagesR _) _ = return Authorized
     isAuthorized UserGetAllR _ = return Authorized
     isAuthorized (UserGetIdsR _) _ = return Authorized

@@ -7,7 +7,7 @@
 / HomeR GET
 /signup SignupR GET POST
 
-/message MessageR GET
+/message/#Text MessageR GET
 /messages/*[UserId] MessagesR GET
 
 /profile MyProfileR GET POST

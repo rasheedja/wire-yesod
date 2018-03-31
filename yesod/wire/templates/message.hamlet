@@ -1,4 +1,0 @@
-<form role=form method=post action=@{MessageR} enctype=#{formEnctype}>
-    ^{formWidget}
-    <div .text-center">
-        <button type="submit" .btn.btn-primary.col-sm-12">Submit</button>

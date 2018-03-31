@@ -13,7 +13,6 @@ import Text.Julius
 -- the search page.
 getProfileR :: Text -> Handler Html
 getProfileR username = do
-    let jsUsername = rawJS username
     maybeUser <- runDB $ getBy $ UniqueUser username
     case maybeUser of
         Just (Entity userId user) -> do

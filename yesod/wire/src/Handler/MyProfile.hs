@@ -20,9 +20,7 @@ messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
 getMyProfileR :: Handler Html
 getMyProfileR = do
     (Entity userId user) <- requireAuth
-
     let username = userUsername user
-    let jsUsername = rawJS username
 
     -- Load messages posted by users followed by the current user
     follows <- runDB $ selectList [FollowFollowingId ==. userId] []
