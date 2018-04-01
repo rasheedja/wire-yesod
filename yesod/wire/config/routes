@@ -16,6 +16,7 @@
 /user UserGetAllR GET
 /user-not-following UserGetAllExcludingFollowingR GET
 /user/#Text UserGetAllExcludingUsernameR GET
+/user/id/#UserId UserGetIdR GET
 /users/*[UserId] UserGetIdsR GET
 
 /follow/#Text FollowR GET

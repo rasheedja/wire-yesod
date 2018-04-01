@@ -57,6 +57,7 @@ import           Handler.Signup
 import           Handler.UserGetAll
 import           Handler.UserGetAllExcludingFollowing
 import           Handler.UserGetAllExcludingUsername
+import           Handler.UserGetId
 import           Handler.UserGetIds
 
 

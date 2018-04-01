@@ -45,7 +45,7 @@
                     <li .list-group-item #messages-header>
                         <h3>
                             Your Feed
-                    <li .list-group-item>
+                    <li .list-group-item .loader-container>
                         <div .loader>
             <div .col-sm-3 #recommended-users>
                 <ul .list-group>
