@@ -22,12 +22,13 @@
 <div .container>
     <div .row>
         $if not $ Just HomeR == mcurrentRoute
-            <ol .breadcrumb.col-sm-12>
-                $forall bc <- parents
-                    <li .breadcrumb-item>
-                        <a href="@{fst bc}">#{snd bc}
+            <div .col-sm-12>
+                <ol .breadcrumb>
+                    $forall bc <- parents
+                        <li .breadcrumb-item>
+                            <a href="@{fst bc}">#{snd bc}
 
-                <li .breadcrumb-item.active>#{title}
+                    <li .breadcrumb-item.active>#{title}
 
     $maybe msg <- mmsg
         $maybe msgrendered <- mmsgrendered
