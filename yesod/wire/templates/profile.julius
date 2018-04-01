@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // Load all messages posted by the user whose page is being viewed
     function loadMessages() {
         $(function () {
             // Retrieve messages to display on the front end
@@ -29,6 +30,31 @@ $(document).ready(function() {
         });
     }
 
+    /*
+    Takes in a username, a button name, and a button type (optional), and
+    returns HTML output to display the given data in a bootstrap list.
+
+    @param username:   The username to display
+    @param buttonName: The name of the button to display
+    @param buttonType: The bootstrap class of the button (danger, default, etc.)
+
+    @return String formatted to be put into a bootstrap list.
+    */
+    function formatUserList(username, buttonName, buttonType = 'default') {
+        var userHTML = "";
+
+        userHTML += "<li class='list-group-item clearfix'>";
+        userHTML += "<span><a href='/profile/" + username + "/'>" + username + "</a></span>";
+        userHTML += "<span class='pull-right'><a href='#' id='" + buttonName + "-" + username + "' class='btn btn-" + buttonType + " " + buttonName + "-button'>" + buttonName + "</a></span>";
+        userHTML += "</li>";
+
+        return userHTML
+    }
+
+    /*
+    Load users not followed by the currently logged in user or, if user is
+    not logged in, load some random users.
+    */
     function loadRecommendedUsers() {
         $(function () {
             // Retrieve other users to display on the frontend
@@ -41,10 +67,7 @@ $(document).ready(function() {
                         var recommendedUsersHeader = $("#recommended-users-header");
 
                         result.forEach(function(userObject) {
-                            usersHTML += "<li class='list-group-item clearfix'>";
-                            usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
-                            usersHTML += "<span class='pull-right'><a href='#' id='follow-" + userObject.username + "' class='btn btn-default follow-button'>Follow</a></span>";
-                            usersHTML += "</li>";
+                            usersHTML += formatUserList(userObject.username, "follow");
                         });
 
                         if (usersHTML === "") {
@@ -65,13 +88,10 @@ $(document).ready(function() {
                                     url: "/follow/" + username + "/",
                                     types: "GET",
                                     success: function (result) {
-                                        console.log(result);
-                                        console.log(element);
                                         element.classList.add('btn-success');
                                         element.classList.add('disabled');
                                         element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>';
                                         loadRecommendedUsers();
-                                        loadFollows();
                                     }
                                 }
                             )
@@ -82,7 +102,9 @@ $(document).ready(function() {
         });
     }
 
-
+    /*
+    Load users who are being followed by the user whose profile page is being viewed
+    */
     function loadFollows() {
         $(function () {
             // Retrieve people followed by the current user to display on the front end
@@ -110,35 +132,11 @@ $(document).ready(function() {
                                         type: "GET",
                                         success: function (result) {
                                             result.forEach(function(userObject) {
-                                                usersHTML += "<li class='list-group-item clearfix'>";
-                                                usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
-                                                usersHTML += "<span class='pull-right'><a href='#' id='unfollow-" + userObject.username + "' class='btn btn-danger unfollow-button'>Unfollow</a></span>";
-                                                usersHTML += "</li>";
+                                                usersHTML += formatUserList(userObject.username, "visit", "default");
                                             });
 
                                             followingHeader.nextAll('li').remove();
                                             followingHeader.after(usersHTML);
-
-                                            $('.unfollow-button').click(function() {
-                                                var element = this;
-                                                var username = element.id.split('-')[1];
-
-                                                $.ajax(
-                                                    {
-                                                        url: "/follow/" + username + "/",
-                                                        types: "GET",
-                                                        success: function (result) {
-                                                            console.log(result);
-                                                            console.log(element);
-                                                            element.classList.add('btn-success');
-                                                            element.classList.add('disabled');
-                                                            element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>'
-                                                            loadRecommendedUsers();
-                                                            loadFollows();
-                                                        }
-                                                    }
-                                                )
-                                            })
                                         }
                                     }
                                 )
@@ -157,6 +155,9 @@ $(document).ready(function() {
         });
     }
 
+    /*
+    Load users following the person whose profile page is being viewed.
+    */
     function loadFollowers() {
         $(function () {
             // Retrieve people followed by the current user to display on the front end
@@ -184,10 +185,7 @@ $(document).ready(function() {
                                         type: "GET",
                                         success: function (result) {
                                             result.forEach(function (userObject) {
-                                                usersHTML += "<li class='list-group-item clearfix'>";
-                                                usersHTML += "<span><a href='/profile?username=" + userObject.username + "'>" + userObject.username + "</a></span>";
-                                                usersHTML += "<span class='pull-right'><a href='/profile?username=" + userObject.username + "' class='btn btn-default'>Visit</a></span>";
-                                                usersHTML += "</li>";
+                                                usersHTML += formatUserList(userObject.username, "visit", "default");
                                             });
 
                                             followersHeader.nextAll('li').remove();
