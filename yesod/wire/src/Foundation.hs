@@ -13,6 +13,9 @@ import           Import.NoFoundation
 import           Text.Hamlet                 (hamletFile)
 import           Text.Jasmine                (minifym)
 
+-- Used only when in "auth-dummy-login" setting is enabled.
+import           Yesod.Auth.Dummy
+
 import qualified Data.CaseInsensitive        as CI
 import qualified Data.Text.Encoding          as TE
 import           Text.Blaze.Html5            as H
@@ -235,8 +238,9 @@ instance YesodAuth App where
         case x of
             Just (Entity uid _) -> return $ Authenticated uid
 
-    authPlugins app = [authHashDBWithForm loginForm (Just . UniqueUser)]
-
+    authPlugins app = [authHashDBWithForm loginForm (Just . UniqueUser)] ++ extraAuthPlugins
+        -- Enable authDummy login if enabled.
+        where extraAuthPlugins = [authDummy | appAuthDummyLogin $ appSettings app]
     authHttpManager = getHttpManager
 
 loginForm :: Route App -> Widget

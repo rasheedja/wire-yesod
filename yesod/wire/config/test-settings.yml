@@ -7,3 +7,5 @@ database:
   #
   #   database: "_env:PGDATABASE:wire_test"
   database: wire_test
+
+auth-dummy-login: true

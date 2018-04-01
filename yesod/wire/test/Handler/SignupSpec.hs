@@ -22,7 +22,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            loginAsCreds "" "" ""
+            signupAsCreds "" "" ""
 
             statusIs 303
             _ <- followRedirect
@@ -38,7 +38,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            loginAsCreds "foo" "foo@bar.com" "foo"
+            signupAsCreds "foo" "foo@bar.com" "foo"
 
             statusIs 303
             _ <- followRedirect
@@ -56,7 +56,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            loginAsCreds "foo" "foo@bar.com" "foo"
+            signupAsCreds "foo" "foo@bar.com" "foo"
 
             statusIs 303
             _ <- followRedirect
@@ -76,7 +76,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            loginAsCreds "foo" "foo" "foo"
+            signupAsCreds "foo" "foo" "foo"
 
             statusIs 303
             _ <- followRedirect

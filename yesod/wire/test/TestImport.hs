@@ -67,10 +67,10 @@ getTables = do
 
     return $ map unSingle tables
 
--- Login as user entity. The user entity must have a valid username, email, and
+-- | Signup as user entity. The user entity must have a valid username, email, and
 -- password for the login to be successful.
-loginAsEntity :: Entity User -> YesodExample App ()
-loginAsEntity (Entity _ user) = do
+signupAsEntity :: Entity User -> YesodExample App ()
+signupAsEntity (Entity _ user) = do
     request $ do
         setMethod "POST"
         setUrl SignupR
@@ -79,10 +79,10 @@ loginAsEntity (Entity _ user) = do
         byLabel "Email" $ userEmail user
         byLabel "Password" $ userPassword user
 
--- Login using the given credentials. The login will only succeed if the
--- credentials are valid
-loginAsCreds :: Text -> Text -> Text -> YesodExample App ()
-loginAsCreds username email password = do
+-- | Signup using the given credentials. The login will only succeed if the
+-- credentials are valid and if the last request was getSignupR
+signupAsCreds :: Text -> Text -> Text -> YesodExample App ()
+signupAsCreds username email password = do
     request $ do
         setMethod "POST"
         setUrl SignupR
@@ -91,7 +91,17 @@ loginAsCreds username email password = do
         byLabel "Email" email
         byLabel "Password" password
 
--- Create a user with a given username, email, and password.
+-- | Authenticate as a user. This relies on the `auth-dummy-login: true` flag
+-- being set in test-settings.yaml, which enables dummy authentication in
+-- Foundation.hs
+authenticateAs :: Entity User -> YesodExample App ()
+authenticateAs (Entity _ user) = do
+    request $ do
+        setMethod "POST"
+        addPostParam "ident" $ userUsername user
+        setUrl $ AuthR $ PluginR "dummy" []
+
+-- | Create a user with a given username, email, and password.
 -- The user is inserted directly into the database and the
 -- user entity is returned
 createUser :: Text -> Text -> Text -> YesodExample App (Entity User)
