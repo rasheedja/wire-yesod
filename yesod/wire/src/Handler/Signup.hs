@@ -1,15 +1,15 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeFamilies          #-}
 
 module Handler.Signup where
 
-import Import
-import Yesod.Auth.HashDB (setPassword)
-import Yesod.Form.Bootstrap3
+import           Import
+import           Yesod.Auth.HashDB     (setPassword)
+import           Yesod.Form.Bootstrap3
 
 signupForm :: Form User
 signupForm = renderBootstrap3 BootstrapBasicForm $ User
@@ -19,7 +19,7 @@ signupForm = renderBootstrap3 BootstrapBasicForm $ User
     where
         uniqueUsername name = checkUserData name ("The username \"" <> name <> "\" is already in use!") $ getBy $ UniqueUser name
         uniqueEmail email = checkUserData email ("The email \"" <> email <>"\" is already in use!") $ getBy $ UniqueEmail email
-        checkUserData userData msg = liftM (maybe (Right userData) (const $ Left (msg::Text))) . runDB
+        checkUserData userData msg = fmap (maybe (Right userData) (const $ Left (msg::Text))) . runDB
 
 getSignupR :: Handler Html
 getSignupR = do
@@ -30,12 +30,12 @@ getSignupR = do
 
 postSignupR :: Handler Html
 postSignupR = do
-    ((result, formWidget), formEnctype) <- runFormPost signupForm
+    ((result, _), _) <- runFormPost signupForm
     case result of
         FormSuccess user -> do
             void $ runDB . insert =<< setPassword (userPassword user) user
             setSession "msgrendered" "true"
-            setMessage $ renderSuccessMessage $ "Welcome to Wire, " <> (userUsername user)
+            setMessage $ renderSuccessMessage $ "Welcome to Wire, " <> userUsername user
             redirect HomeR
         FormFailure errors -> do
             let renderedMessages = map renderErrorMessage errors

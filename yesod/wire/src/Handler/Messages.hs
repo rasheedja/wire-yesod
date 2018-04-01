@@ -1,13 +1,11 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE TypeFamilies          #-}
 module Handler.Messages where
 
 
-import Import
-import Data.Aeson
+import           Data.Aeson
+import           Import
 
 -- Get all the messages posted by the list of given user ids
 getMessagesR :: [UserId] -> Handler Value

@@ -1,13 +1,12 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeFamilies          #-}
 module Handler.MyProfile where
 
-import Import
-import Yesod.Form.Bootstrap3
-import Text.Julius
+import           Import
+import           Yesod.Form.Bootstrap3
 
 messageForm :: UserId -> Form Message
 messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
@@ -24,7 +23,7 @@ getMyProfileR = do
 
     -- Load messages posted by users followed by the current user
     follows <- runDB $ selectList [FollowFollowingId ==. userId] []
-    let followIds = map (\(Entity _ (Follow followIds _)) -> followIds) follows
+    let followIds = map (\(Entity _ (Follow followerId _)) -> followerId) follows
 
     (formWidget, formEnctype) <- generateFormPost $ messageForm userId
     defaultLayout $ do
@@ -40,7 +39,7 @@ postMyProfileR = do
         FormSuccess message -> do
             void $ runDB . insert $ message
             setSession "msgrendered" "true"
-            setMessage $ renderSuccessMessage $ "Wire Sent"
+            setMessage $ renderSuccessMessage "Wire Sent"
             redirect MyProfileR
         FormFailure errors -> do
             let renderedMessages = map renderErrorMessage errors

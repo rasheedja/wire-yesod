@@ -1,12 +1,10 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE TypeFamilies          #-}
 module Handler.UserGetAllExcludingUsername where
 
 
-import Import
+import           Import
 
 -- Return registered users in JSON format excluding the given user
 -- and the currently logged in user

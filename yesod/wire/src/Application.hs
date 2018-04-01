@@ -1,9 +1,9 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RecordWildCards       #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeFamilies          #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Application
     ( getApplicationDev
@@ -19,39 +19,45 @@ module Application
     , db
     ) where
 
-import Control.Monad.Logger                 (liftLoc, runLoggingT)
-import Database.Persist.Postgresql          (createPostgresqlPool, pgConnStr,
-                                             pgPoolSize, runSqlPool)
-import Import
-import Language.Haskell.TH.Syntax           (qLocation)
-import Network.Wai (Middleware)
-import Network.Wai.Handler.Warp             (Settings, defaultSettings,
-                                             defaultShouldDisplayException,
-                                             runSettings, setHost,
-                                             setOnException, setPort, getPort)
-import Network.Wai.Middleware.RequestLogger (Destination (Logger),
-                                             IPAddrSource (..),
-                                             OutputFormat (..), destination,
-                                             mkRequestLogger, outputFormat)
-import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
-                                             toLogStr)
+import           Control.Monad.Logger                 (liftLoc, runLoggingT)
+import           Database.Persist.Postgresql          (createPostgresqlPool,
+                                                       pgConnStr, pgPoolSize,
+                                                       runSqlPool)
+import           Import
+import           Language.Haskell.TH.Syntax           (qLocation)
+import           Network.Wai                          (Middleware)
+import           Network.Wai.Handler.Warp             (Settings,
+                                                       defaultSettings,
+                                                       defaultShouldDisplayException,
+                                                       getPort, runSettings,
+                                                       setHost, setOnException,
+                                                       setPort)
+import           Network.Wai.Middleware.RequestLogger (Destination (Logger),
+                                                       IPAddrSource (..),
+                                                       OutputFormat (..),
+                                                       destination,
+                                                       mkRequestLogger,
+                                                       outputFormat)
+import           System.Log.FastLogger                (defaultBufSize,
+                                                       newStdoutLoggerSet,
+                                                       toLogStr)
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
-import Handler.Common
-import Handler.Home
-import Handler.Profile
-import Handler.MyProfile
-import Handler.Signup
-import Handler.Message
-import Handler.Messages
-import Handler.UserGetAll
-import Handler.UserGetAllExcludingUsername
-import Handler.UserGetAllExcludingFollowing
-import Handler.UserGetIds
-import Handler.Follow
-import Handler.Following
-import Handler.Followers
+import           Handler.Common
+import           Handler.Follow
+import           Handler.Followers
+import           Handler.Following
+import           Handler.Home
+import           Handler.Message
+import           Handler.Messages
+import           Handler.MyProfile
+import           Handler.Profile
+import           Handler.Signup
+import           Handler.UserGetAll
+import           Handler.UserGetAllExcludingFollowing
+import           Handler.UserGetAllExcludingUsername
+import           Handler.UserGetIds
 
 
 -- This line actually creates our YesodDispatch instance. It is the second half

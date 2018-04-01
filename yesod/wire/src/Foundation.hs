@@ -1,27 +1,26 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE ExplicitForAll        #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE ViewPatterns #-}
-{-# LANGUAGE ExplicitForAll #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RankNTypes            #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeFamilies          #-}
 
 module Foundation where
 
-import Import.NoFoundation
-import Database.Persist.Sql (ConnectionPool, runSqlPool)
-import Text.Hamlet          (hamletFile)
-import Text.Jasmine         (minifym)
+import           Database.Persist.Sql        (ConnectionPool, runSqlPool)
+import           Import.NoFoundation
+import           Text.Hamlet                 (hamletFile)
+import           Text.Jasmine                (minifym)
 
-import Yesod.Auth.HashDB    (authHashDBWithForm)
-import Yesod.Default.Util   (addStaticContentExternal)
-import Yesod.Core.Types     (Logger)
-import qualified Yesod.Core.Unsafe as Unsafe
-import qualified Data.CaseInsensitive as CI
-import qualified Data.Text.Encoding as TE
-import Text.Blaze.Html5 as H
-import Text.Blaze.Html5.Attributes as A
+import qualified Data.CaseInsensitive        as CI
+import qualified Data.Text.Encoding          as TE
+import           Text.Blaze.Html5            as H
+import           Text.Blaze.Html5.Attributes as A
+import           Yesod.Auth.HashDB           (authHashDBWithForm)
+import           Yesod.Core.Types            (Logger)
+import qualified Yesod.Core.Unsafe           as Unsafe
+import           Yesod.Default.Util          (addStaticContentExternal)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -36,8 +35,8 @@ data App = App
     }
 
 data MenuItem = MenuItem
-    { menuItemLabel :: Text
-    , menuItemRoute :: Route App
+    { menuItemLabel          :: Text
+    , menuItemRoute          :: Route App
     , menuItemAccessCallback :: Bool
     }
 
@@ -73,7 +72,7 @@ instance Yesod App where
     -- see: https://github.com/yesodweb/yesod/wiki/Overriding-approot
     approot = ApprootRequest $ \app req ->
         case appRoot $ appSettings app of
-            Nothing -> getApprootText guessApproot app req
+            Nothing   -> getApprootText guessApproot app req
             Just root -> root
 
     -- Store session data on the client in encrypted cookies,
@@ -155,24 +154,24 @@ instance Yesod App where
     authRoute _ = Just $ AuthR LoginR
 
     -- Routes not requiring authentication.
-    isAuthorized (AuthR _) _ = return Authorized
-    isAuthorized HomeR _ = return Authorized
-    isAuthorized (ProfileR _) _ = return Authorized
-    isAuthorized (MessageR _) _ = return Authorized
-    isAuthorized (MessagesR _) _ = return Authorized
-    isAuthorized UserGetAllR _ = return Authorized
-    isAuthorized (UserGetIdsR _) _ = return Authorized
+    isAuthorized (AuthR _) _                        = return Authorized
+    isAuthorized HomeR _                            = return Authorized
+    isAuthorized (ProfileR _) _                     = return Authorized
+    isAuthorized (MessageR _) _                     = return Authorized
+    isAuthorized (MessagesR _) _                    = return Authorized
+    isAuthorized UserGetAllR _                      = return Authorized
+    isAuthorized (UserGetIdsR _) _                  = return Authorized
     isAuthorized (UserGetAllExcludingUsernameR _) _ = return Authorized
-    isAuthorized UserGetAllExcludingFollowingR _ = return Authorized
-    isAuthorized SignupR _ = return Authorized
-    isAuthorized (FollowingR _) _ = return Authorized
-    isAuthorized (FollowersR _) _ = return Authorized
-    isAuthorized FaviconR _ = return Authorized
-    isAuthorized RobotsR _ = return Authorized
-    isAuthorized (StaticR _) _ = return Authorized
+    isAuthorized UserGetAllExcludingFollowingR _    = return Authorized
+    isAuthorized SignupR _                          = return Authorized
+    isAuthorized (FollowingR _) _                   = return Authorized
+    isAuthorized (FollowersR _) _                   = return Authorized
+    isAuthorized FaviconR _                         = return Authorized
+    isAuthorized RobotsR _                          = return Authorized
+    isAuthorized (StaticR _) _                      = return Authorized
 
-    isAuthorized MyProfileR _ = isAuthenticated
-    isAuthorized (FollowR _) _ = isAuthenticated
+    isAuthorized MyProfileR _                       = isAuthenticated
+    isAuthorized (FollowR _) _                      = isAuthenticated
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
@@ -204,12 +203,12 @@ instance Yesod App where
 
 -- Define breadcrumbs.
 instance YesodBreadcrumbs App where
-  breadcrumb HomeR = return ("Home", Nothing)
-  breadcrumb (AuthR _) = return ("Login", Just HomeR)
+  breadcrumb HomeR        = return ("Home", Nothing)
+  breadcrumb (AuthR _)    = return ("Login", Just HomeR)
   breadcrumb (ProfileR _) = return ("Profile", Just HomeR)
-  breadcrumb MyProfileR = return ("Profile", Just HomeR)
-  breadcrumb SignupR = return ("Sign Up", Just HomeR)
-  breadcrumb  _ = return ("home", Nothing)
+  breadcrumb MyProfileR   = return ("Profile", Just HomeR)
+  breadcrumb SignupR      = return ("Sign Up", Just HomeR)
+  breadcrumb  _           = return ("home", Nothing)
 
 -- How to run database actions.
 instance YesodPersist App where
@@ -251,7 +250,7 @@ isAuthenticated = do
     muid <- maybeAuthId
     return $ case muid of
         Nothing -> Unauthorized "You must login to access this page"
-        Just _ -> Authorized
+        Just _  -> Authorized
 
 renderErrorMessage :: Text -> Html
 renderErrorMessage msg = do

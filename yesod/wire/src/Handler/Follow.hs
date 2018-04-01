@@ -1,12 +1,11 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TypeFamilies          #-}
 module Handler.Follow where
 
 
-import Import
+import           Import
 
 getFollowR :: Text -> Handler Value
 getFollowR username = do
@@ -30,13 +29,11 @@ getFollowR username = do
                             where
                                 success = True :: Bool
                                 message = "You have successfully followed " ++ username :: Text
-                Nothing -> do
-                    returnJson $ object ["success" .= success, "message" .= message]
+                Nothing -> returnJson $ object ["success" .= success, "message" .= message]
                     where
                         success = False :: Bool
                         message = "The user you tried to follow was not found" :: Text
-        Nothing -> do
-            returnJson $ object ["success" .= success, "message" .= message]
+        Nothing -> returnJson $ object ["success" .= success, "message" .= message]
             where
                 success = False :: Bool
                 message = "You must be logged in to follow a user" :: Text
