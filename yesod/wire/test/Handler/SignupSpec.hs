@@ -22,13 +22,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            request $ do
-                setMethod "POST"
-                setUrl SignupR
-                addToken
-                byLabel "Username" ""
-                byLabel "Email" ""
-                byLabel "Password" ""
+            loginAsCreds "" "" ""
 
             statusIs 303
             _ <- followRedirect
@@ -44,13 +38,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            request $ do
-                setMethod "POST"
-                setUrl SignupR
-                addToken
-                byLabel "Username" "foo"
-                byLabel "Email" "foo@bar.com"
-                byLabel "Password" "foo"
+            loginAsCreds "foo" "foo@bar.com" "foo"
 
             statusIs 303
             _ <- followRedirect
@@ -63,18 +51,12 @@ spec = withApp $ do
             assertEq "user table has one entry" 1 $ length users
 
         it "tries to create a user using a username and email that has already been taken" $ do
-            _ <- runDB $ insert $ User "foo" "foo@bar.com" "foo"
+            _ <- createUser "foo" "foo@bar.com" "foo"
 
             get SignupR
             statusIs 200
 
-            request $ do
-                setMethod "POST"
-                setUrl SignupR
-                addToken
-                byLabel "Username" "foo"
-                byLabel "Email" "foo@bar.com"
-                byLabel "Password" "foo"
+            loginAsCreds "foo" "foo@bar.com" "foo"
 
             statusIs 303
             _ <- followRedirect
@@ -94,13 +76,7 @@ spec = withApp $ do
             get SignupR
             statusIs 200
 
-            request $ do
-                setMethod "POST"
-                setUrl SignupR
-                addToken
-                byLabel "Username" "foo"
-                byLabel "Email" "foo"
-                byLabel "Password" "foo"
+            loginAsCreds "foo" "foo" "foo"
 
             statusIs 303
             _ <- followRedirect
