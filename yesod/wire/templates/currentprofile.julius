@@ -83,10 +83,10 @@ $(document).ready(function() {
                 type: "GET",
                 success: function (result) {
                     var messagesHeader = $("#messages-header");
-                    // Display a message if the user has not posted any messages
+                    // Display a message if no one has posted any messages
                     if (result.length === 0) {
                         messagesHeader.nextAll('li').remove();
-                        messagesHeader.after("<li class='list-group-item'>This user has not created any wires</li>")
+                        messagesHeader.after("<li class='list-group-item'>There are no messages</li>")
                     } else {
                         // Display messages if we received a result from the server
                         $.each(result, function(index, messageObject) {
