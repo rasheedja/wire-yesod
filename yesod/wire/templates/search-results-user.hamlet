@@ -1,0 +1,20 @@
+<main>
+    <div .container>
+        <div .row>
+            <div .col-sm-12>
+                <h1> Search Results
+                $if (length results) > 0
+                    <h3>
+                        User's Found
+                    <ul .list-group>
+                        $forall (Entity _ (User username _ _)) <- results
+                            <li .list-group-item>
+                                <h4 .list-group-item-heading>
+                                    <a href=@{ProfileR username}>
+                                        #{username}
+                $else
+                    <h3>
+                        No user containing #{query} in their name found
+                    <h4>
+                        <a href=@{SearchR}>
+                            Click here to go back to the search page

@@ -22,3 +22,7 @@
 /follow/#Text FollowR GET
 /following/#Text FollowingR GET
 /followers/#Text FollowersR GET
+
+/search SearchR GET POST
+/search/user/#Text SearchUsernameR GET
+/search/wire/#Text SearchMessageR GET

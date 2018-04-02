@@ -53,6 +53,9 @@ import           Handler.Message
 import           Handler.Messages
 import           Handler.MyProfile
 import           Handler.Profile
+import           Handler.Search
+import           Handler.SearchMessage
+import           Handler.SearchUsername
 import           Handler.Signup
 import           Handler.UserGetAll
 import           Handler.UserGetAllExcludingFollowing

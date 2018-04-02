@@ -18,7 +18,6 @@ getProfileR username = do
             setTitle . toHtml $ userUsername user
             $(widgetFile "profile")
         Nothing -> defaultLayout $ do
-            -- TODO: Redirect to user search page
             setSession "msgrendered" "true"
-            setMessage $ renderErrorMessage "Username not found"
-            redirect HomeR
+            setMessage $ renderErrorMessage "Username not found, tried a search..."
+            redirect $ SearchUsernameR username

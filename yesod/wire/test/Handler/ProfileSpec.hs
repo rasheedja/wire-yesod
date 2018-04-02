@@ -13,14 +13,15 @@ spec = withApp $ do
             get $ ProfileR "foo"
             statusIs 200
 
-        it "asserts error message is shown when accessing non-existant user's page" $ do
+        it "asserts search page with error message is shown when accessing non-existant user's page" $ do
             get $ ProfileR "foo"
 
             statusIs 303
             _ <- followRedirect
             statusIs 200
 
-            htmlAnyContain ".alert-danger > span" "Username not found"
+            htmlAnyContain ".alert-danger > span" "Username not found, tried a search..."
+            htmlAnyContain "h1" "Search Results"
 
         it "asserts profile page is correctly rendered for existing users" $ do
             _ <- createUser "foo" "foo@bar.com" "foo"

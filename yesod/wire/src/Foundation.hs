@@ -119,6 +119,11 @@ instance Yesod App where
                     , menuItemRoute = MyProfileR
                     , menuItemAccessCallback = isJust muser
                     }
+                , NavbarLeft $ MenuItem
+                    { menuItemLabel = "Search"
+                    , menuItemRoute = SearchR
+                    , menuItemAccessCallback = True
+                    }
                 , NavbarRight $ MenuItem
                     { menuItemLabel = "Login"
                     , menuItemRoute = AuthR LoginR
@@ -174,6 +179,9 @@ instance Yesod App where
     isAuthorized FaviconR _                         = return Authorized
     isAuthorized RobotsR _                          = return Authorized
     isAuthorized (StaticR _) _                      = return Authorized
+    isAuthorized SearchR _                          = return Authorized
+    isAuthorized (SearchUsernameR _) _              = return Authorized
+    isAuthorized (SearchMessageR _) _               = return Authorized
 
     isAuthorized MyProfileR _                       = isAuthenticated
     isAuthorized (FollowR _) _                      = isAuthenticated
@@ -209,12 +217,15 @@ instance Yesod App where
 
 -- Define breadcrumbs.
 instance YesodBreadcrumbs App where
-  breadcrumb HomeR        = return ("Home", Nothing)
-  breadcrumb (AuthR _)    = return ("Login", Just HomeR)
-  breadcrumb (ProfileR _) = return ("Profile", Just HomeR)
-  breadcrumb MyProfileR   = return ("Profile", Just HomeR)
-  breadcrumb SignupR      = return ("Sign Up", Just HomeR)
-  breadcrumb  _           = return ("home", Nothing)
+  breadcrumb HomeR               = return ("Home", Nothing)
+  breadcrumb (AuthR _)           = return ("Login", Just HomeR)
+  breadcrumb (ProfileR _)        = return ("Profile", Just HomeR)
+  breadcrumb MyProfileR          = return ("Profile", Just HomeR)
+  breadcrumb SignupR             = return ("Sign Up", Just HomeR)
+  breadcrumb SearchR             = return ("Search", Just HomeR)
+  breadcrumb (SearchMessageR _)  = return ("Search Results", Just SearchR)
+  breadcrumb (SearchUsernameR _) = return ("Search Results", Just SearchR)
+  breadcrumb  _                  = return ("Home", Nothing)
 
 -- How to run database actions.
 instance YesodPersist App where

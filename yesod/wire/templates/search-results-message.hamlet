@@ -1,0 +1,25 @@
+<main>
+    <div .container>
+        <div .row>
+            <div .col-sm-12>
+                <h1> Search Results
+                $if (length results) > 0
+                    <h3>
+                        Wire's Found
+                    <ul .list-group>
+                        $forall (Entity _ (Message message posterId postedTime)) <- results
+                            <li .list-group-item>
+                                <h4 .list-group-item-heading>
+                                    #{message}
+                                <p .list-group-item-text>
+                                    Posted on #{formatTime defaultTimeLocale "%d/%m/%Y at %H:%M" postedTime} by #
+                                    $forall (Entity userId (User username _ _)) <- posters
+                                        $if userId == posterId
+                                            <a href=@{ProfileR username}>
+                                                #{username}
+                $else
+                    <h3>
+                        No message containing #{query} found
+                    <h4>
+                        <a href=@{SearchR}>
+                            Click here to go back to the search page

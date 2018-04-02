@@ -1,0 +1,6 @@
+<main>
+    <div .container>
+        <div .row>
+            <div .col-sm-12>
+                <form #search-form .inline .form-horizontal role=form method=post action=@{SearchR} enctype=#{formEnctype}>
+                    ^{formWidget}
