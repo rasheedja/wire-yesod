@@ -18,9 +18,11 @@ import           Yesod.Auth.Dummy
 
 import qualified Data.CaseInsensitive        as CI
 import qualified Data.Text.Encoding          as TE
-import           Text.Blaze.Html5            as H
-import           Text.Blaze.Html5.Attributes as A
+import           Text.Blaze.Html5            as H (a, dataAttribute, div, span,
+                                                   toHtml, (!))
+import           Text.Blaze.Html5.Attributes as A (class_, href)
 import           Yesod.Auth.HashDB           (authHashDBWithForm)
+import           Yesod.Auth.Message          (AuthMessage (InvalidUsernamePass))
 import           Yesod.Core.Types            (Logger)
 import qualified Yesod.Core.Unsafe           as Unsafe
 import           Yesod.Default.Util          (addStaticContentExternal)
@@ -237,6 +239,7 @@ instance YesodAuth App where
         x <- getBy $ UniqueUser $ credsIdent creds
         case x of
             Just (Entity uid _) -> return $ Authenticated uid
+            Nothing             -> return $ UserError InvalidUsernamePass
 
     authPlugins app = [authHashDBWithForm loginForm (Just . UniqueUser)] ++ extraAuthPlugins
         -- Enable authDummy login if enabled.
