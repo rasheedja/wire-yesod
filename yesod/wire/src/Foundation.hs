@@ -166,7 +166,6 @@ instance Yesod App where
     isAuthorized (UserGetIdR _) _                   = return Authorized
     isAuthorized (UserGetIdsR _) _                  = return Authorized
     isAuthorized (UserGetAllExcludingUsernameR _) _ = return Authorized
-    isAuthorized UserGetAllExcludingFollowingR _    = return Authorized
     isAuthorized SignupR _                          = return Authorized
     isAuthorized (FollowingR _) _                   = return Authorized
     isAuthorized (FollowersR _) _                   = return Authorized
@@ -176,6 +175,7 @@ instance Yesod App where
 
     isAuthorized MyProfileR _                       = isAuthenticated
     isAuthorized (FollowR _) _                      = isAuthenticated
+    isAuthorized UserGetAllExcludingFollowingR _    = isAuthenticated
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows

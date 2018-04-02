@@ -14,7 +14,9 @@ getUserGetAllR = do
     case maybeUser of
         Just (Entity _ user) -> do
             users <- runDB $ selectList [UserUsername !=. userUsername user] [LimitTo 5]
-            returnJson users
+            let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
+            returnJson cleanUsers
         Nothing -> do
             users <- runDB $ selectList [UserUsername !=. ""] [LimitTo 5]
-            returnJson users
+            let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
+            returnJson cleanUsers
