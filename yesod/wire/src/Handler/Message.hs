@@ -17,6 +17,7 @@ getMessageR username = do
         Just (Entity userId _) -> do
             messages <- runDB $ selectList [MessageUserId ==. userId] []
             returnJson messages
-        Nothing -> returnJson $ object ["message" .= message]
+        Nothing -> returnJson $ object ["success" .= success, "message" .= message]
             where
-                message = "The given user was not found" :: Text
+                message = "The given username was not found" :: Text
+                success = False :: Bool
