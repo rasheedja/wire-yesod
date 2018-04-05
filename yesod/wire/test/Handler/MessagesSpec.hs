@@ -8,6 +8,9 @@ import           TestImport
 
 spec :: Spec
 spec = withApp $ do
+    let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
+    let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
+    let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
 
     describe "getMessagesR" $ do
         it "asserts access for anonymous users" $ do
@@ -31,9 +34,7 @@ spec = withApp $ do
         it "asserts that a request returns the correct data when a single user has posted a single message" $ do
             (Entity fooId _) <- createUser "foo" "foo@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
+            createMessage "Blablabla" fooId aprilFirst2017UTCTime
 
             get $ MessagesR [fooId]
             bodyContains "message"
@@ -47,13 +48,9 @@ spec = withApp $ do
         it "asserts that a request returns the correct data when a single user has posted multiple messages" $ do
             (Entity fooId _) <- createUser "foo" "foo@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-            let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
-            let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
-            _ <- runDB $ insert $ Message "FooBarBaz" fooId juneFifteen2017UTCTime
-            _ <- runDB $ insert $ Message "YesodDjango" fooId februarySecond2018OnePMUTCTime
+            createMessage "Blablabla" fooId aprilFirst2017UTCTime
+            createMessage "FooBarBaz" fooId juneFifteen2017UTCTime
+            createMessage "YesodDjango" fooId februarySecond2018OnePMUTCTime
 
             get $ MessagesR [fooId]
             bodyContains "message"
@@ -72,13 +69,9 @@ spec = withApp $ do
             (Entity barId _) <- createUser "bar" "bar@bar.com" "foo"
             (Entity bazId _) <- createUser "baz" "baz@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-            let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
-            let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
-            _ <- runDB $ insert $ Message "FooBarBaz" barId juneFifteen2017UTCTime
-            _ <- runDB $ insert $ Message "YesodDjango" bazId februarySecond2018OnePMUTCTime
+            createMessage "Blablabla" fooId aprilFirst2017UTCTime
+            createMessage "FooBarBaz" barId juneFifteen2017UTCTime
+            createMessage "YesodDjango" bazId februarySecond2018OnePMUTCTime
 
             get $ MessagesR [fooId, barId, bazId]
             bodyContains "message"
@@ -98,14 +91,10 @@ spec = withApp $ do
             (Entity fooId _) <- createUser "foo" "foo@bar.com" "foo"
             (Entity barId _) <- createUser "bar" "bar@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-            let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
-            let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
-            _ <- runDB $ insert $ Message "FooBarBaz" fooId juneFifteen2017UTCTime
-            _ <- runDB $ insert $ Message "YesodDjango" barId februarySecond2018OnePMUTCTime
-            _ <- runDB $ insert $ Message "DjangoYesod" barId februarySecond2018OnePMUTCTime
+            createMessage "Blablabla" fooId aprilFirst2017UTCTime
+            createMessage "FooBarBaz" fooId juneFifteen2017UTCTime
+            createMessage "YesodDjango" barId februarySecond2018OnePMUTCTime
+            createMessage "DjangoYesod" barId februarySecond2018OnePMUTCTime
 
             get $ MessagesR [fooId, barId]
             bodyContains "message"

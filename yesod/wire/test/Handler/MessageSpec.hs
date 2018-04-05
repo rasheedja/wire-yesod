@@ -8,6 +8,9 @@ import           TestImport
 
 spec :: Spec
 spec = withApp $ do
+    let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
+    let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
+    let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
 
     describe "getMessageR" $ do
         it "asserts access for anonymous users" $ do
@@ -30,9 +33,7 @@ spec = withApp $ do
         it "asserts that a request returns the correct data when a user has posted a single message" $ do
             (Entity fooId _) <- createUser "foo" "foo@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
+            _ <- createMessage "Blablabla" fooId aprilFirst2017UTCTime
 
             get $ MessageR "foo"
             bodyContains "message"
@@ -46,13 +47,9 @@ spec = withApp $ do
         it "asserts that a request returns the correct data when a user has posted multiple messages" $ do
             (Entity fooId _) <- createUser "foo" "foo@bar.com" "foo"
 
-            let aprilFirst2017UTCTime = UTCTime (fromGregorian 2017 4 1 :: Day) 0
-            let juneFifteen2017UTCTime = UTCTime (fromGregorian 2017 6 15 :: Day) 0
-            let februarySecond2018OnePMUTCTime = UTCTime (fromGregorian 2018 2 2 :: Day) 46800
-
-            _ <- runDB $ insert $ Message "Blablabla" fooId aprilFirst2017UTCTime
-            _ <- runDB $ insert $ Message "FooBarBaz" fooId juneFifteen2017UTCTime
-            _ <- runDB $ insert $ Message "YesodDjango" fooId februarySecond2018OnePMUTCTime
+            _ <- createMessage "Blablabla" fooId aprilFirst2017UTCTime
+            _ <- createMessage "FooBarBaz" fooId juneFifteen2017UTCTime
+            _ <- createMessage"YesodDjango" fooId februarySecond2018OnePMUTCTime
 
             get $ MessageR "foo"
             bodyContains "message"
