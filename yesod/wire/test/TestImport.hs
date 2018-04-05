@@ -108,3 +108,10 @@ createUser :: Text -> Text -> Text -> YesodExample App (Entity User)
 createUser username email password = runDB $ do
     user <- insertEntity $ User username email password
     return user
+
+-- | Create a message using the given user and the supplied message.
+-- The created message is returned
+createMessage :: Text -> UserId -> UTCTime -> YesodExample App (Entity Message)
+createMessage message userId time = runDB $ do
+    messageEntity <- insertEntity $ Message message userId time
+    return messageEntity
