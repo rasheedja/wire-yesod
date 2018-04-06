@@ -7,16 +7,12 @@
                     <h3>
                         Wire's Found
                     <ul .list-group>
-                        $forall (Entity _ (Message message posterId postedTime)) <- results
+                        $forall (MessageInfo message posterName postedTime) <- formattedResults
                             <li .list-group-item>
                                 <h4 .list-group-item-heading>
                                     #{message}
                                 <p .list-group-item-text>
-                                    Posted on #{formatTime defaultTimeLocale "%d/%m/%Y at %H:%M" postedTime} by #
-                                    $forall (Entity userId (User username _ _)) <- posters
-                                        $if userId == posterId
-                                            <a href=@{ProfileR username}>
-                                                #{username}
+                                    Posted on #{postedTime} by #{posterName}
                 $else
                     <h3>
                         No message containing #{query} found
