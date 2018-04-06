@@ -18,7 +18,7 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # reload-templates: false
 # mutable-static: false
 # skip-combining: false
-# auth-dummy-login : false
+auth-dummy-login : false
 
 # NB: If you need a numeric value (e.g. 123) to parse as a String, wrap it in single quotes (e.g. "_env:PGPASS:'123'")
 # See https://github.com/yesodweb/yesod/wiki/Configuration#parsing-numeric-values-as-strings
@@ -32,5 +32,5 @@ database:
   database: "_env:PGDATABASE:wire"
   poolsize: "_env:PGPOOLSIZE:10"
 
-copyright: Think of a footer
+copyright: Junaid Rasheed
 #analytics: UA-YOURCODE
