@@ -6,7 +6,17 @@
         <div .row>
             <div .col-sm-8>
                 <h1>Latest Wires
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                $if length formattedLatestMessages > 0
+                    <ul #latest-messages .list-group>
+                        $forall (MessageInfo message posterName postedTime) <- formattedLatestMessages
+                            <li .list-group-item>
+                                <h4 .list-group-item-heading>
+                                    #{message}
+                                <p .list-group-item-text>
+                                    Posted on #{postedTime} by #{posterName}
+                $else
+                    <h3>
+                        No one has created a Wire yet
             <div .col-sm-4>
                 <h1>Popular Tags
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
