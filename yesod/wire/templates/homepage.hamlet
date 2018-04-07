@@ -7,16 +7,26 @@
             <div .col-sm-8>
                 <h1>Latest Wires
                 $if length formattedLatestMessages > 0
-                    <ul #latest-messages .list-group>
+                    <ul #latest-messages .messages-list .list-group>
                         $forall (MessageInfo message posterName postedTime) <- formattedLatestMessages
                             <li .list-group-item>
                                 <h4 .list-group-item-heading>
                                     #{message}
                                 <p .list-group-item-text>
-                                    Posted on #{postedTime} by #{posterName}
+                                    Posted on #{postedTime} by <a href="@{ProfileR posterName}">#{posterName}</a>
                 $else
                     <h3>
                         No one has created a Wire yet
             <div .col-sm-4>
-                <h1>Popular Tags
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <h1>Latest Tagged Wires
+                $if length formattedTaggedMessages > 0
+                    <ul #latest-tagged-messages .messages-list .list-group>
+                        $forall (MessageInfo message posterName postedTime) <- formattedTaggedMessages
+                            <li .list-group-item>
+                                <h4 .list-group-item-heading>
+                                    #{message}
+                                <p .list-group-item-text>
+                                    Posted on #{postedTime} by <a href="@{ProfileR posterName}">#{posterName}</a>
+                $else
+                    <h3>
+                        No one has created a Tagged Wire yet

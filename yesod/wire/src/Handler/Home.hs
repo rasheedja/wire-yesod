@@ -21,7 +21,12 @@ getHomeR = do
     let posterIds = Import.map (\(Entity _ (Message _ posterId _)) -> posterId) latestMessages
     posters <- runDB $ selectList [UserId <-. posterIds] []
 
+    latestTaggedMessages <- runDB $ selectList [Filter MessageMessage (Left $ Import.concat ["% #%"]) (BackendSpecificFilter "ILIKE")] [Desc MessageCreated, LimitTo 5]
+    let taggedPosterIds = Import.map (\(Entity _ (Message _ posterId _)) -> posterId) latestTaggedMessages
+    taggedPosters <- runDB $ selectList [UserId <-. taggedPosterIds] []
+
     let formattedLatestMessages = Import.map (formatMessageEntity posters) latestMessages
+    let formattedTaggedMessages = Import.map (formatMessageEntity taggedPosters) latestTaggedMessages
 
     defaultLayout $ do
         setTitle "Welcome To Wire!"

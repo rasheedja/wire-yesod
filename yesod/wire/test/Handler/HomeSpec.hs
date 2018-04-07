@@ -18,7 +18,7 @@ spec = withApp $ do
             get HomeR
             statusIs 200
             htmlAnyContain "h1" "Latest Wires"
-            htmlAnyContain "h1" "Popular Tags"
+            htmlAnyContain "h1" "Latest Tagged Wires"
 
         -- This is a simple example of using a database access in a test.  The
         -- test will succeed for a fresh scaffolded site with an empty database,
@@ -76,3 +76,29 @@ spec = withApp $ do
             htmlAnyContain "#latest-messages .list-group-item" "test message 5"
             htmlAnyContain "#latest-messages .list-group-item" "test message 6"
             htmlAnyContain "#latest-messages .list-group-item" "test message 7"
+
+        it "asserts that a tagged message is displayed correctly" $ do
+            foo <- createUser "foo" "foo@bar.com" "foo"
+            _ <- createMessage "test message 1" (entityKey foo) $ addUTCTime (5 :: NominalDiffTime) aprilFirst2017UTCTime
+            _ <- createMessage "test message 2 #tagged" (entityKey foo) $ addUTCTime (65 :: NominalDiffTime) aprilFirst2017UTCTime
+
+            get HomeR
+            htmlCount "#latest-tagged-messages .list-group-item" 1
+            htmlNoneContain "#latest-tagged-messages .list-group-item" "test message 1"
+            htmlAnyContain "#latest-tagged-messages .list-group-item" "test message 2 #tagged"
+
+        it "asserts that multipled tagged messages are displayed correctly" $ do
+            foo <- createUser "foo" "foo@bar.com" "foo"
+            _ <- createMessage "test message 1" (entityKey foo) $ addUTCTime (5 :: NominalDiffTime) aprilFirst2017UTCTime
+            _ <- createMessage "test message 2" (entityKey foo) $ addUTCTime (35 :: NominalDiffTime) aprilFirst2017UTCTime
+            _ <- createMessage "test message 3 #tagged" (entityKey foo) $ addUTCTime (45 :: NominalDiffTime) aprilFirst2017UTCTime
+            _ <- createMessage "test message 4 #foobar" (entityKey foo) $ addUTCTime (55 :: NominalDiffTime) aprilFirst2017UTCTime
+            _ <- createMessage "test message 5 #barbaz" (entityKey foo) $ addUTCTime (65 :: NominalDiffTime) aprilFirst2017UTCTime
+
+            get HomeR
+            htmlCount "#latest-tagged-messages .list-group-item" 3
+            htmlNoneContain "#latest-tagged-messages .list-group-item" "test message 1"
+            htmlNoneContain "#latest-tagged-messages .list-group-item" "test message 2"
+            htmlAnyContain "#latest-tagged-messages .list-group-item" "test message 3 #tagged"
+            htmlAnyContain "#latest-tagged-messages .list-group-item" "test message 4 #foobar"
+            htmlAnyContain "#latest-tagged-messages .list-group-item" "test message 5 #barbaz"

@@ -1,50 +1,15 @@
 $(document).ready(function() {
     /*
-    Takes in a username, a button name, and a button type (optional), and
-    returns HTML output to display the given data in a bootstrap list.
-
-    @param username:   The username to display
-    @param buttonName: The name of the button to display
-    @param buttonType: The bootstrap class of the button (danger, default, etc.)
-
-    @return String: string formatted to be put into a bootstrap list.
-    */
-    function formatUserList(username, buttonName, buttonType = 'default') {
-        var userHTML = "";
-
-        userHTML += "<li class='list-group-item clearfix'>";
-        userHTML += "<span><a href='/profile/" + username + "/'>" + username + "</a></span>";
-        userHTML += "<span class='pull-right'><a href='#' id='" + buttonName + "-" + username + "' class='btn btn-" + buttonType + " " + buttonName + "-button'>" + buttonName + "</a></span>";
-        userHTML += "</li>";
-
-        return userHTML
-    }
-
-    /*
-    Formats a timestamp from Yesod's persistent model into "DD/MM/YY at HH:MM".
-    The timestamp given must be an instance of javascript's Date.
-
-    @param timestamp: The timestamp to format as a javascript Date object
-
-    @return String: The formatted timestamp
-    */
-    function formatTimeStamp(timestamp) {
-        var messageDateString = timestamp.getDate() + "/" + timestamp.getMonth() + "/" + timestamp.getFullYear();
-        messageDateString += " at " + timestamp.getHours() + ":" + timestamp.getMinutes();
-
-        return messageDateString;
-    }
-
-    /*
     Formats each message into HTML to be shown on the frontend and then displays the message.
 
     @param message:           The contents of the message
     @param messageDateString: Date and time as a string
     */
     function formatMessage(message, messageDateString) {
+        var formattedMessage = createLinksForHashtags(message);
         var messagesList = $("#messages-list");
         var messagesHtml = "<li class='list-group-item'>";
-        messagesHtml += "<h4 class='list-group-item-heading'>" + message + "</h4>";
+        messagesHtml += "<h4 class='list-group-item-heading'>" + formattedMessage + "</h4>";
         messagesHtml += "<p class='list-group-item-text'>"
         messagesHtml += "Posted on " + messageDateString;
         messagesHtml += "</p>"
