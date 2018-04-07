@@ -15,7 +15,7 @@ getMessageR username = do
     maybeUser <- runDB $ getBy $ UniqueUser username
     case maybeUser of
         Just (Entity userId _) -> do
-            messages <- runDB $ selectList [MessageUserId ==. userId] []
+            messages <- runDB $ selectList [MessageUserId ==. userId] [Desc MessageCreated]
             returnJson messages
         Nothing -> returnJson $ object ["success" .= success, "message" .= message]
             where

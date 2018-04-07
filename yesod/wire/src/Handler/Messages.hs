@@ -10,5 +10,5 @@ import           Import
 -- Get all the messages posted by the list of given user ids
 getMessagesR :: [UserId] -> Handler Value
 getMessagesR userIds = do
-    messages <- runDB $ selectList [MessageUserId <-. userIds] []
+    messages <- runDB $ selectList [MessageUserId <-. userIds] [Desc MessageCreated]
     returnJson messages

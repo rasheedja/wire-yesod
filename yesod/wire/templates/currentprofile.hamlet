@@ -41,7 +41,7 @@
                     <li .list-group-item>
                         <div .loader>
             <div .col-sm-6 .user-wires>
-                <ul .list-group>
+                <ul .list-group #messages-list>
                     <li .list-group-item #messages-header>
                         <h3>
                             Your Feed
