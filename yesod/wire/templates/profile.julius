@@ -90,14 +90,14 @@ $(document).ready(function() {
         // Retrieve other users to display on the frontend
         $.ajax(
             {
-                url: "@{UserGetAllExcludingFollowingR}",
+                url: "@{UserGetAllR}",
                 type: "GET",
                 success: function (result) {
                     var usersHTML = "";
                     var recommendedUsersHeader = $("#recommended-users-header");
 
                     result.forEach(function(userObject) {
-                        usersHTML += formatUserList(userObject.username, "follow");
+                        usersHTML += formatUserList(userObject.username, "visit");
                     });
 
                     if (usersHTML === "") {
@@ -161,7 +161,7 @@ $(document).ready(function() {
                                     type: "GET",
                                     success: function (result) {
                                         result.forEach(function (userObject) {
-                                            usersHTML += formatUserList(userObject.username, "unfollow", "danger");
+                                            usersHTML += formatUserList(userObject.username, "visit");
                                         });
 
                                         followingHeader.nextAll('li').remove();
