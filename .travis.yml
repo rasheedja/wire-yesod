@@ -33,8 +33,8 @@ services:
 before_script:
   - psql -c "CREATE USER wire WITH PASSWORD 'wire'"
   - psql -c "ALTER USER wire CREATEDB"
-  - psql -c "CREATE DATABASE wire OWNER wire"
-  - psql -c "CREATE DATABASE wire_test OWNER wire"
+  - psql -c "CREATE DATABASE yesod_wire OWNER wire"
+  - psql -c "CREATE DATABASE yesod_wire_test OWNER wire"
 
 before_install:
   # Download and unpack the stack executable
