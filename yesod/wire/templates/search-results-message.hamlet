@@ -5,7 +5,7 @@
                 <h1> Search Results
                 $if (length results) > 0
                     <h3>
-                        Wire's Found
+                        Wires Found
                     <ul .list-group .messages-list>
                         $forall (MessageInfo message posterName postedTime) <- formattedResults
                             <li .list-group-item>

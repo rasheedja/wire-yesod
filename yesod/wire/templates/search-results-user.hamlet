@@ -5,7 +5,7 @@
                 <h1> Search Results
                 $if (length results) > 0
                     <h3>
-                        User's Found
+                        Users Found
                     <ul .list-group>
                         $forall (Entity _ (User username _ _)) <- results
                             <li .list-group-item>
