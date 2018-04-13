@@ -10,18 +10,17 @@ $(document).ready(function() {
         var messagesList = $("#messages-list");
         var messagesHtml = "<li class='list-group-item'>";
         messagesHtml += "<h4 class='list-group-item-heading'>" + formattedMessage + "</h4>";
-        messagesHtml += "<p class='list-group-item-text'>"
+        messagesHtml += "<p class='list-group-item-text'>";
         messagesHtml += "Posted on " + messageDateString;
-        messagesHtml += "</p>"
+        messagesHtml += "</p>";
         messagesHtml += "</li>";
 
-        $('.user-wires .loader-container').remove()
+        $('.user-wires .loader-container').remove();
         messagesList.append(messagesHtml);
     }
 
     // Load all messages posted by followers using AJAX
     function loadMessages() {
-        var messagesHtml = ""
         $.ajax(
             {
                 url: "@{MessageR username}",
@@ -33,11 +32,12 @@ $(document).ready(function() {
                         messagesHeader.nextAll('li').remove();
                         messagesHeader.after("<li class='list-group-item'>This user has not created any wires</li>")
                     } else {
+                        messagesHeader.nextAll('li').remove();
                         // Display messages if we received a result from the server
                         $.each(result, function(index, messageObject) {
                             // Format the date from the message to
                             var messageDate = new Date(messageObject.created);
-                            var messageDateString = formatTimeStamp(messageDate)
+                            var messageDateString = formatTimeStamp(messageDate);
 
                             formatMessage(messageObject.message, messageDateString, messageObject.userId)
                         });
@@ -73,25 +73,6 @@ $(document).ready(function() {
 
                     recommendedUsersHeader.nextAll('li').remove();
                     recommendedUsersHeader.after(usersHTML);
-
-                    $('.follow-button').click(function() {
-                        var element = this;
-                        var username = element.id.split('-')[1];
-
-                        $.ajax(
-                            {
-                                url: "/follow/" + username + "/",
-                                types: "GET",
-                                success: function (result) {
-                                    element.classList.add('btn-success');
-                                    element.classList.add('disabled');
-                                    element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>';
-                                    loadRecommendedUsers();
-                                    loadFollows();
-                                }
-                            }
-                        )
-                    })
                 }
             }
         )
@@ -108,7 +89,7 @@ $(document).ready(function() {
                 type: "GET",
                 success: function (result) {
                     if (!result.success && result.success !== undefined) {
-                        console.log(result.message)
+                        console.log(result.message);
                     } else {
                         var usersHTML = "";
                         var followingHeader = $("#following-header");
@@ -131,27 +112,6 @@ $(document).ready(function() {
 
                                         followingHeader.nextAll('li').remove();
                                         followingHeader.after(usersHTML);
-
-                                        $('.unfollow-button').click(function() {
-                                            var element = this;
-                                            var username = element.id.split('-')[1];
-
-                                            $.ajax(
-                                                {
-                                                    url: "/follow/" + username + "/",
-                                                    types: "GET",
-                                                    success: function (result) {
-                                                        console.log(result);
-                                                        console.log(element);
-                                                        element.classList.add('btn-success');
-                                                        element.classList.add('disabled');
-                                                        element.innerHTML = '<span class="glyphicon glyphicon-ok-circle"></span>'
-                                                        loadRecommendedUsers();
-                                                        loadFollows();
-                                                    }
-                                                }
-                                            )
-                                        })
                                     }
                                 }
                             )
@@ -179,7 +139,7 @@ $(document).ready(function() {
                 type: "GET",
                 success: function (result) {
                     if (!result.success && result.success !== undefined) {
-                        console.log(result.message)
+                        console.log(result.message);
                     } else {
                         var followersHeader = $("#followers-header");
                         var usersHTML = "";
