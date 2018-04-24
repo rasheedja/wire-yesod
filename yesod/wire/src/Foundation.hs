@@ -245,7 +245,7 @@ instance YesodAuth App where
     -- Where to send a user after logout
     logoutDest _ = HomeR
     -- Override the above two destinations when a Referer: header is present
-    redirectToReferer _ = True
+    redirectToReferer _ = False
 
     authenticate creds = runDB $ do
         x <- getBy $ UniqueUser $ credsIdent creds
