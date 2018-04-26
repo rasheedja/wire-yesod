@@ -33,9 +33,10 @@ postSignupR = do
     ((result, _), _) <- runFormPost signupForm
     case result of
         FormSuccess user -> do
-            void $ runDB . insert =<< setPassword (userPassword user) user
+            _ <- runDB . insert =<< setPassword (userPassword user) user
             setSession "msgrendered" "true"
             setMessage $ renderSuccessMessage $ "Welcome to Wire, " <> userUsername user
+            setCreds False $ Creds "hashdb" (userUsername user) []
             redirect HomeR
         FormFailure errors -> do
             let renderedMessages = map renderErrorMessage errors
