@@ -27,7 +27,6 @@ postSearchR = do
     case result of
         FormSuccess searchData -> do
             let Search userQuery userIsWireSearch = searchData
-            liftIO $ print $ userIsWireSearch
             if userIsWireSearch
                 then redirect $ SearchMessageR userQuery
                 else redirect $ SearchUsernameR userQuery

@@ -21,10 +21,6 @@ getMyProfileR = do
     (Entity userId user) <- requireAuth
     let username = userUsername user
 
-    -- Load messages posted by users followed by the current user
-    follows <- runDB $ selectList [FollowFollowingId ==. userId] []
-    let followIds = map (\(Entity _ (Follow followerId _)) -> followerId) follows
-
     (formWidget, formEnctype) <- generateFormPost $ messageForm userId
     defaultLayout $ do
         setTitle . toHtml $ userUsername user
@@ -37,7 +33,7 @@ postMyProfileR = do
     ((result, _), _) <- runFormPost $ messageForm userId
     case result of
         FormSuccess message -> do
-            void $ runDB . insert $ message
+            _ <- runDB . insert $ message
             setSession "msgrendered" "true"
             setMessage $ renderSuccessMessage "Wire Sent"
             redirect MyProfileR
