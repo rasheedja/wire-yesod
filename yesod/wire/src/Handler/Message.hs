@@ -9,7 +9,7 @@ import           Data.Aeson
 import           Import
 
 
--- Get all the messages posted by the given user
+-- | Get all the messages posted by the given user
 getMessageR :: Text -> Handler Value
 getMessageR username = do
     maybeUser <- runDB $ getBy $ UniqueUser username

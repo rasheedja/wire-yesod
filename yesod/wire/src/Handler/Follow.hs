@@ -7,6 +7,7 @@ module Handler.Follow where
 
 import           Import
 
+-- | Attempt to follow the user given in the request
 getFollowR :: Text -> Handler Value
 getFollowR username = do
     Entity userId _ <- requireAuth

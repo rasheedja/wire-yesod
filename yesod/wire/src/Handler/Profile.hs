@@ -7,7 +7,7 @@ module Handler.Profile where
 
 import           Import
 
--- Check if the given username exists in the database and if it does, load the
+-- | Check if the given username exists in the database and if it does, load the
 -- profile page for the specified user. If the username does not exist, load
 -- the search page.
 getProfileR :: Text -> Handler Html

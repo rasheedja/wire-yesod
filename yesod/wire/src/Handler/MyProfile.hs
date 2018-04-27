@@ -14,7 +14,7 @@ messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
     <*> pure userId
     <*> lift (liftIO getCurrentTime)
 
--- Loads the 'My Profile' page for the currently logged in user. If someone
+-- | Loads the 'My Profile' page for the currently logged in user. If someone
 -- who is not logged in attempts to access the page, a 404 error will be shown.
 getMyProfileR :: Handler Html
 getMyProfileR = do
@@ -26,7 +26,7 @@ getMyProfileR = do
         setTitle . toHtml $ userUsername user
         $(widgetFile "currentprofile")
 
--- Create a new wire for the logged in user
+-- | Create a new wire for the logged in user
 postMyProfileR :: Handler Html
 postMyProfileR = do
     (Entity userId _) <- requireAuth

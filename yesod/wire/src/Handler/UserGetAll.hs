@@ -7,7 +7,7 @@ module Handler.UserGetAll where
 
 import           Import
 
--- Return registered users in JSON format excluded the currently logged in user
+-- | Return registered users in JSON format excluded the currently logged in user
 getUserGetAllR :: Handler Value
 getUserGetAllR = do
     maybeUser <- maybeAuth

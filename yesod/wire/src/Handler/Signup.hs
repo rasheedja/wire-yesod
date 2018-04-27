@@ -11,6 +11,8 @@ import           Import
 import           Yesod.Auth.HashDB     (setPassword)
 import           Yesod.Form.Bootstrap3
 
+-- | Define the signup form and error messages when a user tries to sign up
+-- with details that are already taken
 signupForm :: Form User
 signupForm = renderBootstrap3 BootstrapBasicForm $ User
     <$> areq (checkM uniqueUsername textField) (bfs ("Username" :: Text)) Nothing
@@ -21,6 +23,7 @@ signupForm = renderBootstrap3 BootstrapBasicForm $ User
         uniqueEmail email = checkUserData email ("The email \"" <> email <>"\" is already in use!") $ getBy $ UniqueEmail email
         checkUserData userData msg = fmap (maybe (Right userData) (const $ Left (msg::Text))) . runDB
 
+-- | Load the signup page
 getSignupR :: Handler Html
 getSignupR = do
     (formWidget, formEnctype) <- generateFormPost signupForm
@@ -28,6 +31,8 @@ getSignupR = do
         setTitle "Wire - Sign Up"
         $(widgetFile "signup")
 
+-- | Take in the search form submitted by the user and create a user
+-- if the form is valid or show an appropriate message if there is a problem
 postSignupR :: Handler Html
 postSignupR = do
     ((result, _), _) <- runFormPost signupForm

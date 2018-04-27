@@ -7,6 +7,7 @@ module Handler.Following where
 
 import           Import
 
+-- | Return a list of users the given user is following
 getFollowingR :: Text -> Handler Value
 getFollowingR username = do
     maybeUser <- runDB $ selectFirst [UserUsername ==. username] []
