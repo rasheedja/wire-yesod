@@ -50,3 +50,17 @@ spec = withApp $ do
 
             assertEq "message is Lorem Ipsum" "Lorem Ipsum" $ messageMessage message
             assertEq "message posted by foo" (entityKey foo) $ messageUserId message
+
+        it "asserts that an empty message cannot be created" $ do
+            foo <- createUser "foo" "foo@bar.com" "foo"
+            authenticateAs foo
+            get MyProfileR
+
+            request $ do
+                setMethod "POST"
+                setUrl MyProfileR
+                addToken
+                byLabel "Message" ""
+
+            messages <- runDB $ selectList ([] :: [Filter Message]) []
+            assertEq "no messages" 0 $ length messages
